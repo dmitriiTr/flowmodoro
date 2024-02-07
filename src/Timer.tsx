@@ -1,71 +1,58 @@
 import { Task } from './App';
-import { useState } from 'react';
 import { useTimer } from 'react-timer-hook';
+
+//import { useState } from 'react';
+
 
 interface TimerProps {
   selectedTask: Task,
-  handleExit: (seconds: number) => void,
+  handleExit: () => void,
+  lastFocus: number
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const Timer = (props: TimerProps) => {
-  const { selectedTask, handleExit } = props;
-  const [total, setTotal] = useState(selectedTask.time);
+  const { handleExit, lastFocus } = props;
 
-  const [paused, setPaused] = useState(false);
-  const [mode, setMode] = useState<'focus' | 'rest'>('focus');
-  const timeFocus = new Date();
-  const focusSeconds = 4; //1500
-  timeFocus.setSeconds(timeFocus.getSeconds() + focusSeconds);
+  //const [paused, setPaused] = useState(false);
   const timeRest = new Date();
-  const restSeconds = 3; //300
-  timeRest.setSeconds(timeRest.getSeconds() + restSeconds); //300
+  const restSeconds = lastFocus / 2; // lastFocus / 5
+  timeRest.setSeconds(timeRest.getSeconds() + restSeconds);
 
   const onExpire = () => {
-    if (mode === 'focus') {
-      restart(timeRest, false);
-      setMode('rest');
-      setTotal(total + 4);
-    } else {
-      restart(timeFocus, false);
-      setMode('focus');
-    }
-    restart(mode === 'focus' ? timeRest : timeFocus, false);
+    console.warn('expired');
   };
 
   const {
-    totalSeconds,
+    //totalSeconds,
     seconds,
     minutes,
-    start,
-    pause,
-    restart,
-    resume
+    //start,
+    //pause,
+    //restart,
+    //resume
   } = useTimer({
-    autoStart: false,
-    expiryTimestamp: timeFocus,
+    autoStart: true,
+    expiryTimestamp: timeRest,
     onExpire
   });
 
-  const handlePauseClick = () => {
-    if (!paused) {
-      pause();
-    }
-    else {
-      resume();
-    }
-    setPaused(!paused);
-  };
+  // const handlePauseClick = () => {
+  //   if (!paused) {
+  //     pause();
+  //   }
+  //   else {
+  //     resume();
+  //   }
+  //   setPaused(!paused);
+  // };
 
-  const handleStartClick = () => {
-    start(); // doesent want to autostart in onExpire()
-  };
+  // const handleStartClick = () => {
+  //   start(); // doesent want to autostart in onExpire()
+  // };
 
   const handleExitClick = () => {
-    if (mode === 'focus') {
-      setTotal(total + focusSeconds - totalSeconds);
-    }
-    handleExit(total + focusSeconds - totalSeconds);
+    handleExit();
   };
 
   return (
@@ -73,14 +60,14 @@ const Timer = (props: TimerProps) => {
       <div style={{ fontSize: '100px' }}>
         <span>{minutes}</span>:<span>{seconds}</span>
       </div>
-      <button onClick={handlePauseClick}>Pause/Unpause</button>
-      <button onClick={handleStartClick}>Start</button>
-      <button onClick={handleExitClick}>Exit</button>
+      {/* <button onClick={handlePauseClick}>Pause/Unpause</button> */}
+      {/* <button onClick={handleStartClick}>Start</button> */}
+      <button onClick={handleExitClick}>End rest</button>
       {/* <p className="read-the-docs">
         P to pause, S to stop
       </p> */}
       <p className="read-the-docs">
-        {selectedTask.activity} {total}
+        rest
       </p>
     </div>
   );

@@ -1,5 +1,6 @@
 import './App.css';
 
+import Stopwatch from './Stopwatch';
 import Timer from './Timer';
 import { useState } from 'react';
 
@@ -15,38 +16,57 @@ const App = () => {
   const [tasks, setTasks] = useState(activities
     .map(activity => ({ activity, time: 0 })) as Task[]);
 
-  const [activity, setActivity] = useState<Activity>('reading');
+  const [activity, setActivity] = useState<Activity>('work');
   const [showTimer, setShowTimer] = useState(true);
+  const [mode, setMode] = useState<'focus' | 'rest'>('focus');
+  const [lastFocus, setLastFocus] = useState(0);
 
   const handleStart = () => {
     setShowTimer(true);
   };
 
-  const handleExit = (seconds: number) => {
-    setTasks(tasks =>
-      tasks.map(t => {
-        if (t.activity === activity) {
-          return { ...t, time: seconds }
-        } else {
-          return t;
-        }
-      }));
+  const handleReturn = () => {
     setShowTimer(false);
+    setMode('focus');
   };
 
-  const handleActivitySelect = (e: React.FormEvent<HTMLSelectElement>) => {
-    setActivity(e.currentTarget.value as Activity);
+  const handleExitTimer = () => {
+    setMode('focus');
   };
+
+  const handleExitStopwatch = (seconds: number) => {
+    setTasks(tasks => tasks.map(t => {
+      if (t.activity === activity) {
+        return { ...t, time: t.time + seconds };
+      } else {
+        return t;
+      }
+    }));
+    setLastFocus(seconds);
+    setMode('rest');
+  };
+
+  const handleActivitySelect = (e: React.FormEvent<HTMLSelectElement>) =>
+    setActivity(e.currentTarget.value as Activity);
 
   const selectedTask = tasks.find(a => a.activity === activity);
 
   return (
     <>
       {showTimer && selectedTask
-        ? <Timer
-          selectedTask={selectedTask}
-          handleExit={handleExit}
-        />
+        ? <>
+          {mode === 'rest'
+            ? <Timer
+              lastFocus={lastFocus}
+              selectedTask={selectedTask}
+              handleExit={handleExitTimer}
+            />
+            : <Stopwatch
+              selectedTask={selectedTask}
+              handleExit={handleExitStopwatch}
+            />}
+          <button onClick={() => handleReturn()}>Exit</button>
+        </>
         : <>
           <table>
             <tbody>
@@ -59,8 +79,8 @@ const App = () => {
           <button onClick={() => handleStart()}>Start</button>
           <br />
           <select onChange={handleActivitySelect}>
-            {activities.map(activity =>
-              <option key={activity} value={activity}>{activity}</option>)}
+            {activities.map(a =>
+              <option selected={a === activity} key={a} value={a}>{a}</option>)}
           </select>
         </>}
     </>
