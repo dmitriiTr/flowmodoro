@@ -73,9 +73,9 @@ const Timer = (props: TimerProps) => {
       <div style={{ fontSize: '100px' }}>
         <span>{minutes}</span>:<span>{seconds}</span>
       </div>
-      <button onClick={handlePauseClick}></button>
-      <button onClick={handleStartClick}></button>
-      <button onClick={handleExitClick}></button>
+      <button onClick={handlePauseClick}>Pause</button>
+      <button onClick={handleStartClick}>Start</button>
+      <button onClick={handleExitClick}>Exit</button>
       <p className="read-the-docs">
         P to pause, S to stop
       </p>

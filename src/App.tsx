@@ -50,7 +50,7 @@ const App = () => {
               </tr>)}
             </tbody>
           </table>
-          <button onClick={() => handleStart()}></button>
+          <button onClick={() => handleStart()}>Start</button>
           <br />
           <select onChange={handleActivitySelect}>
             {activities.map(activity =>
