@@ -18,8 +18,7 @@ const App = () => {
 
   const [activity, setActivity] = useState<Activity>('work');
   const [showTimer, setShowTimer] = useState(true);
-  const [mode, setMode] = useState<'focus' | 'rest'>('focus');
-  const [lastFocus, setLastFocus] = useState(0);
+  const [lastFocus, setLastFocus] = useState<null | number>(null);
 
   const handleStart = () => {
     setShowTimer(true);
@@ -27,11 +26,11 @@ const App = () => {
 
   const handleReturn = () => {
     setShowTimer(false);
-    setMode('focus');
+    setLastFocus(null);
   };
 
   const handleExitTimer = () => {
-    setMode('focus');
+    setLastFocus(null);
   };
 
   const handleExitStopwatch = (seconds: number) => {
@@ -43,7 +42,6 @@ const App = () => {
       }
     }));
     setLastFocus(seconds);
-    setMode('rest');
   };
 
   const handleActivitySelect = (e: React.FormEvent<HTMLSelectElement>) =>
@@ -55,7 +53,7 @@ const App = () => {
     <>
       {showTimer && selectedTask
         ? <>
-          {mode === 'rest'
+          {lastFocus
             ? <Timer
               lastFocus={lastFocus}
               selectedTask={selectedTask}
