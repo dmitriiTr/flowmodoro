@@ -1,8 +1,9 @@
 import './App.css';
 
+import { useEffect, useState } from 'react';
+
 import Stopwatch from './Stopwatch';
 import Timer from './Timer';
-import { useState } from 'react';
 
 const activities = ['reading', 'work'] as const;
 type Activity = typeof activities[number];
@@ -20,6 +21,13 @@ const App = () => {
   const [showTimer, setShowTimer] = useState(true);
   const [lastFocus, setLastFocus] = useState<null | number>(null);
 
+  useEffect(() => {
+    const storedTasks = localStorage.getItem('task');
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks));
+    }
+  }, []);
+
   const handleStart = () => {
     setShowTimer(true);
   };
@@ -34,14 +42,11 @@ const App = () => {
   };
 
   const handleExitStopwatch = (seconds: number) => {
-    setTasks(tasks => tasks.map(t => {
-      if (t.activity === activity) {
-        return { ...t, time: t.time + seconds };
-      } else {
-        return t;
-      }
-    }));
+    const updatedTasks = tasks.map(t =>
+      t.activity === activity ? { ...t, time: t.time + seconds } : t);
     setLastFocus(seconds);
+    setTasks(updatedTasks);
+    localStorage.setItem('task', JSON.stringify(updatedTasks));
   };
 
   const handleActivitySelect = (e: React.FormEvent<HTMLSelectElement>) =>
