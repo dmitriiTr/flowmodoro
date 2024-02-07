@@ -1,4 +1,6 @@
+import Button from '@mui/material/Button';
 import { Task } from './App';
+import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 
@@ -49,14 +51,15 @@ const Stopwatch = (props: StopwatchProps) => {
         <span>{minutes}</span>:<span>{seconds}
         </span>
       </div>
-      <button onClick={handlePauseClick}>Start/Pause</button>
-      <button onClick={handleExitClick}>Rest</button>
-      {/* <p className="read-the-docs">
-        P to pause, S to stop
-      </p> */}
-      <p className="read-the-docs">
+      <Button variant='outlined' onClick={() => handlePauseClick()}>
+        Start/Pause
+      </Button>
+      <Button variant='outlined' onClick={() => handleExitClick()}>
+        Rest
+      </Button>
+      <Typography color="textSecondary" variant="subtitle1">
         task: {selectedTask.activity}
-      </p>
+      </Typography>
     </div>
   );
 };

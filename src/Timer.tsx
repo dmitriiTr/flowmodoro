@@ -1,4 +1,6 @@
+import Button from '@mui/material/Button';
 import { Task } from './App';
+import Typography from '@mui/material/Typography';
 import { useTimer } from 'react-timer-hook';
 
 //import { useState } from 'react';
@@ -60,15 +62,12 @@ const Timer = (props: TimerProps) => {
       <div style={{ fontSize: '100px' }}>
         <span>{minutes}</span>:<span>{seconds}</span>
       </div>
-      {/* <button onClick={handlePauseClick}>Pause/Unpause</button> */}
-      {/* <button onClick={handleStartClick}>Start</button> */}
-      <button onClick={handleExitClick}>End rest</button>
-      {/* <p className="read-the-docs">
-        P to pause, S to stop
-      </p> */}
-      <p className="read-the-docs">
+      <Button variant='outlined' onClick={() => handleExitClick()}>
+        End rest
+      </Button>
+      <Typography color="textSecondary" variant="subtitle1">
         rest
-      </p>
+      </Typography>
     </div>
   );
 };

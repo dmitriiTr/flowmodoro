@@ -1,7 +1,9 @@
 import './App.css';
 
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useEffect, useState } from 'react';
 
+import Button from '@mui/material/Button';
 import Stopwatch from './Stopwatch';
 import Timer from './Timer';
 
@@ -49,8 +51,8 @@ const App = () => {
     localStorage.setItem('task', JSON.stringify(updatedTasks));
   };
 
-  const handleActivitySelect = (e: React.FormEvent<HTMLSelectElement>) =>
-    setActivity(e.currentTarget.value as Activity);
+  const handleActivitySelect = (e: SelectChangeEvent) =>
+    setActivity(e.target.value as Activity);
 
   const selectedTask = tasks.find(a => a.activity === activity);
 
@@ -68,7 +70,9 @@ const App = () => {
               selectedTask={selectedTask}
               handleExit={handleExitStopwatch}
             />}
-          <button onClick={() => handleReturn()}>Exit</button>
+          <Button variant='contained' onClick={() => handleReturn()}>
+            Exit
+          </Button>
         </>
         : <>
           <table>
@@ -79,12 +83,22 @@ const App = () => {
               </tr>)}
             </tbody>
           </table>
-          <button onClick={() => handleStart()}>Start</button>
+          <Button variant='contained' onClick={() => handleStart()}>
+            Start
+          </Button>
           <br />
-          <select onChange={handleActivitySelect}>
-            {activities.map(a =>
-              <option selected={a === activity} key={a} value={a}>{a}</option>)}
-          </select>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id="activity-label">Activity</InputLabel>
+            <Select
+              labelId="activity-label"
+              value={activity}
+              onChange={handleActivitySelect}
+              label="Activity"
+            >
+              {activities.map(a =>
+                <MenuItem key={a} value={a}>{a}</MenuItem>)}
+            </Select>
+          </FormControl>
         </>}
     </>
   );
