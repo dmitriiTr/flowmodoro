@@ -73,14 +73,14 @@ const Timer = (props: TimerProps) => {
       <div style={{ fontSize: '100px' }}>
         <span>{minutes}</span>:<span>{seconds}</span>
       </div>
-      <button onClick={handlePauseClick}>Pause</button>
+      <button onClick={handlePauseClick}>Pause/Unpause</button>
       <button onClick={handleStartClick}>Start</button>
       <button onClick={handleExitClick}>Exit</button>
-      <p className="read-the-docs">
+      {/* <p className="read-the-docs">
         P to pause, S to stop
-      </p>
+      </p> */}
       <p className="read-the-docs">
-        {selectedTask.activity} {totalSeconds}
+        {selectedTask.activity} {total}
       </p>
     </div>
   );

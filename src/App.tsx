@@ -12,8 +12,8 @@ export interface Task {
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const App = () => {
-  const activitiesWithTime: Task[] = activities
-    .map(activity => ({ activity, time: 0 }));
+  const [tasks, setTasks] = useState(activities
+    .map(activity => ({ activity, time: 0 })) as Task[]);
 
   const [activity, setActivity] = useState<Activity>('reading');
   const [showTimer, setShowTimer] = useState(true);
@@ -23,8 +23,14 @@ const App = () => {
   };
 
   const handleExit = (seconds: number) => {
-    const index = activitiesWithTime.findIndex(a => a.activity === activity);
-    activitiesWithTime[index].time = seconds;
+    setTasks(tasks =>
+      tasks.map(t => {
+        if (t.activity === activity) {
+          return { ...t, time: seconds }
+        } else {
+          return t;
+        }
+      }));
     setShowTimer(false);
   };
 
@@ -32,7 +38,7 @@ const App = () => {
     setActivity(e.currentTarget.value as Activity);
   };
 
-  const selectedTask = activitiesWithTime.find(a => a.activity === activity);
+  const selectedTask = tasks.find(a => a.activity === activity);
 
   return (
     <>
@@ -44,7 +50,7 @@ const App = () => {
         : <>
           <table>
             <tbody>
-              {activitiesWithTime.map(a => <tr key={a.activity}>
+              {tasks.map(a => <tr key={a.activity}>
                 <td>{a.activity}</td>
                 <td>{a.time}</td>
               </tr>)}
