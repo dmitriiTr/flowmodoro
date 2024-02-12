@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Task } from './App';
 import Typography from '@mui/material/Typography';
@@ -58,17 +59,18 @@ const Timer = (props: TimerProps) => {
   };
 
   return (
-    <div className="card">
-      <div style={{ fontSize: '100px' }}>
-        <span>{minutes}</span>:<span>{seconds}</span>
-      </div>
+    <Box display='flex' flexDirection='column'
+      alignItems="center" justifyContent="center">
+      <Typography textAlign='center' variant='h1'>
+        {minutes}:{seconds}
+      </Typography>
       <Button variant='outlined' onClick={() => handleExitClick()}>
         End rest
       </Button>
-      <Typography color="textSecondary" variant="subtitle1">
+      <Typography textAlign='center' color="textSecondary" variant="subtitle1">
         rest
       </Typography>
-    </div>
+    </Box>
   );
 };
 

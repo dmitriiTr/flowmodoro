@@ -1,3 +1,5 @@
+import { Box, Stack } from '@mui/material';
+
 import Button from '@mui/material/Button';
 import { Task } from './App';
 import Typography from '@mui/material/Typography';
@@ -43,24 +45,24 @@ const Stopwatch = (props: StopwatchProps) => {
   };
 
   return (
-    <div className="card">
-      <div style={{
-        fontSize: '100px',
-        color: totalSeconds > focusSeconds ? 'green' : 'black'
-      }}>
-        <span>{minutes}</span>:<span>{seconds}
-        </span>
-      </div>
-      <Button variant='outlined' onClick={() => handlePauseClick()}>
-        Start/Pause
-      </Button>
-      <Button variant='outlined' onClick={() => handleExitClick()}>
-        Rest
-      </Button>
-      <Typography color="textSecondary" variant="subtitle1">
+    <Box display='flex' flexDirection='column'
+      alignItems="center" justifyContent="center">
+      <Typography textAlign='center' variant='h1'
+        color={totalSeconds > focusSeconds ? 'primary' : undefined}>
+        {minutes}:{seconds}
+      </Typography>
+      <Stack direction="row" spacing={2}>
+        <Button variant='outlined' onClick={() => handlePauseClick()}>
+          Start/Pause
+        </Button>
+        <Button variant='outlined' onClick={() => handleExitClick()}>
+          Rest
+        </Button>
+      </Stack>
+      <Typography textAlign='center' color='textSecondary' variant="subtitle1">
         task: {selectedTask.activity}
       </Typography>
-    </div>
+    </Box>
   );
 };
 

@@ -1,11 +1,32 @@
-import './App.css';
-
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  PaperProps,
+  Select,
+  SelectChangeEvent,
+  Table,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 
 import Button from '@mui/material/Button';
 import Stopwatch from './Stopwatch';
 import Timer from './Timer';
+import { styled } from '@mui/material/styles';
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const SizedPaper = styled(Paper)<PaperProps>(() => ({
+  width: 500,
+  height: 500 * 1.4,
+  //color: theme.palette.success.main,
+}));
 
 const activities = ['reading', 'work'] as const;
 type Activity = typeof activities[number];
@@ -56,51 +77,83 @@ const App = () => {
 
   const selectedTask = tasks.find(a => a.activity === activity);
 
+  const tasksTable = () => <TableContainer component={Paper}>
+    <Table aria-label="simple table">
+      <TableHead>
+        <TableRow>
+          <TableCell>Activity</TableCell>
+          <TableCell align="right">Seconds</TableCell>
+        </TableRow>
+      </TableHead>
+      {tasks.map((task) => (
+        <TableRow
+          key={task.activity}
+        >
+          <TableCell component="th" scope="row">
+            {task.activity}
+          </TableCell>
+          <TableCell align="right">
+            {task.time}
+          </TableCell>
+        </TableRow>))}
+    </Table>
+  </TableContainer>;
+
   return (
-    <>
-      {showTimer && selectedTask
-        ? <>
-          {lastFocus
-            ? <Timer
-              lastFocus={lastFocus}
-              selectedTask={selectedTask}
-              handleExit={handleExitTimer}
-            />
-            : <Stopwatch
-              selectedTask={selectedTask}
-              handleExit={handleExitStopwatch}
-            />}
-          <Button variant='contained' onClick={() => handleReturn()}>
-            Exit
-          </Button>
-        </>
-        : <>
-          <table>
-            <tbody>
-              {tasks.map(a => <tr key={a.activity}>
-                <td>{a.activity}</td>
-                <td>{a.time}</td>
-              </tr>)}
-            </tbody>
-          </table>
-          <Button variant='contained' onClick={() => handleStart()}>
-            Start
-          </Button>
-          <br />
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel id="activity-label">Activity</InputLabel>
-            <Select
-              labelId="activity-label"
-              value={activity}
-              onChange={handleActivitySelect}
-              label="Activity"
-            >
-              {activities.map(a =>
-                <MenuItem key={a} value={a}>{a}</MenuItem>)}
-            </Select>
-          </FormControl>
-        </>}
-    </>
+    <Grid
+      container
+      spacing={0}
+      direction="row"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ minHeight: '100vh' }}
+    >
+      <Grid container md={5} alignItems="center" justifyContent="center">
+        <Grid item>
+          <SizedPaper elevation={4}>
+            <Box pt={25} m={2}>
+              {showTimer && selectedTask
+                ? <>
+                  {lastFocus
+                    ? <Timer
+                      lastFocus={lastFocus}
+                      selectedTask={selectedTask}
+                      handleExit={handleExitTimer}
+                    />
+                    : <Stopwatch
+                      selectedTask={selectedTask}
+                      handleExit={handleExitStopwatch}
+                    />}
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant='contained' onClick={() => handleReturn()}>
+                      Exit
+                    </Button>
+                  </Box>
+                </>
+                : <Box display='flex' flexDirection='column'
+                  alignItems="center" justifyContent="center">
+                  <Button variant='contained' onClick={() => handleStart()}>
+                    Start
+                  </Button>
+                  <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    <InputLabel id="activity-label">Activity</InputLabel>
+                    <Select
+                      labelId="activity-label"
+                      value={activity}
+                      onChange={handleActivitySelect}
+                      label="Activity"
+                    >
+                      {activities.map(a =>
+                        <MenuItem key={a} value={a}>{a}</MenuItem>)}
+                    </Select>
+                  </FormControl>
+                  {tasksTable()}
+                </Box>}
+            </Box>
+          </SizedPaper>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };
 
