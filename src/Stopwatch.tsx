@@ -1,7 +1,8 @@
-import { Box, Stack } from '@mui/material';
+import { Box, Stack, TextField } from '@mui/material';
 
 import Button from '@mui/material/Button';
 import { Task } from './App';
+import { Time } from './Time';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useStopwatch } from 'react-timer-hook';
@@ -15,9 +16,11 @@ interface StopwatchProps {
 const Stopwatch = (props: StopwatchProps) => {
   const { selectedTask, handleExit } = props;
 
+  const baseDuration = 30;
   const [paused, setPaused] = useState(true);
+  const [started, setStarted] = useState(false);
+  const [focusSeconds, setFocusSeconds] = useState(baseDuration);
   const timeFocus = new Date();
-  const focusSeconds = 3; //1500
   timeFocus.setSeconds(timeFocus.getSeconds() + focusSeconds);
 
   const {
@@ -36,6 +39,7 @@ const Stopwatch = (props: StopwatchProps) => {
     }
     else {
       start();
+      setStarted(true);
     }
     setPaused(!paused);
   };
@@ -47,18 +51,23 @@ const Stopwatch = (props: StopwatchProps) => {
   return (
     <Box display='flex' flexDirection='column'
       alignItems="center" justifyContent="center">
-      <Typography textAlign='center' variant='h1'
-        color={totalSeconds > focusSeconds ? 'primary' : undefined}>
-        {minutes}:{seconds}
-      </Typography>
-      <Stack direction="row" spacing={2}>
-        <Button variant='outlined' onClick={() => handlePauseClick()}>
-          Start/Pause
-        </Button>
-        <Button variant='outlined' onClick={() => handleExitClick()}>
-          Rest
-        </Button>
-      </Stack>
+      <Time minutes={minutes} seconds={seconds}
+        overtime={totalSeconds > focusSeconds} />
+      <Box sx={{ width: '60%' }}>
+        <Stack direction="row" spacing={2}>
+          <TextField value={focusSeconds} size='small'
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              setFocusSeconds(parseInt(event.target.value))
+            }
+            disabled={started} label="Duration" variant="outlined" />
+          <Button variant='outlined' onClick={() => handlePauseClick()}>
+            Start
+          </Button>
+          <Button variant='outlined' onClick={() => handleExitClick()}>
+            Rest
+          </Button>
+        </Stack>
+      </Box>
       <Typography textAlign='center' color='textSecondary' variant="subtitle1">
         task: {selectedTask.activity}
       </Typography>

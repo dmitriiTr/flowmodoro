@@ -12,7 +12,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 
@@ -159,32 +159,6 @@ const App = () => {
 
 export default App;
 
-// useEffect(() => {
-//   const keyDownHandler = (e: globalThis.KeyboardEvent) => {
-//     if (e.key === 'p') {
-//       e.preventDefault();
-//       console.log(paused);
-//       if (!paused) {
-//         setPaused((state) => {
-//           console.log(state);
-//           return true;
-//         });
-//         pause();
-//         setPaused((state) => {
-//           console.log(state);
-//           return true;
-//         });
-//       }
-//       else {
-//         setPaused(false);
-//         console.log('resume');
-//         resume();
-//       }
-//     }
-//   }
-//   document.addEventListener('keydown', keyDownHandler);
-//   return () => {
-//     document.removeEventListener('keydown', keyDownHandler);
-//   };
 
-// }, [pause, paused, resume]);
+//<div style="margin-top: 197px;border-top: 0.1px solid black;width: 150px;"></div>
+//<div style="font-size: 10px;">Время на отдых - пятая часть, потраченная на фокус</div>

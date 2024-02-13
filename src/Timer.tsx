@@ -1,11 +1,9 @@
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Task } from './App';
+import { Time } from './Time';
 import Typography from '@mui/material/Typography';
 import { useTimer } from 'react-timer-hook';
-
-//import { useState } from 'react';
-
 
 interface TimerProps {
   selectedTask: Task,
@@ -17,9 +15,8 @@ interface TimerProps {
 const Timer = (props: TimerProps) => {
   const { handleExit, lastFocus } = props;
 
-  //const [paused, setPaused] = useState(false);
   const timeRest = new Date();
-  const restSeconds = lastFocus / 2; // lastFocus / 5
+  const restSeconds = lastFocus / 5; // lastFocus / 5
   timeRest.setSeconds(timeRest.getSeconds() + restSeconds);
 
   const onExpire = () => {
@@ -27,32 +24,13 @@ const Timer = (props: TimerProps) => {
   };
 
   const {
-    //totalSeconds,
     seconds,
     minutes,
-    //start,
-    //pause,
-    //restart,
-    //resume
   } = useTimer({
     autoStart: true,
     expiryTimestamp: timeRest,
     onExpire
   });
-
-  // const handlePauseClick = () => {
-  //   if (!paused) {
-  //     pause();
-  //   }
-  //   else {
-  //     resume();
-  //   }
-  //   setPaused(!paused);
-  // };
-
-  // const handleStartClick = () => {
-  //   start(); // doesent want to autostart in onExpire()
-  // };
 
   const handleExitClick = () => {
     handleExit();
@@ -61,9 +39,7 @@ const Timer = (props: TimerProps) => {
   return (
     <Box display='flex' flexDirection='column'
       alignItems="center" justifyContent="center">
-      <Typography textAlign='center' variant='h1'>
-        {minutes}:{seconds}
-      </Typography>
+      <Time minutes={minutes} seconds={seconds} />
       <Button variant='outlined' onClick={() => handleExitClick()}>
         End rest
       </Button>
