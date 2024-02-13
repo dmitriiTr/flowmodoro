@@ -9,6 +9,7 @@ import {
   Select,
   SelectChangeEvent,
   Table,
+  TableBody,
   TableCell,
   TableContainer,
   TableHead,
@@ -35,19 +36,36 @@ export interface Task {
   time: number;
 }
 
+export interface TasksWithDay {
+  day: string,
+  tasks: Task[]
+}
+
+const nowString = () =>
+  new Date().toLocaleDateString();
+
+const emptyTodayTask = {
+  day: nowString(),
+  tasks: activities
+    .map(activity => ({ activity, time: 0 }))
+};
+
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const App = () => {
-  const [tasks, setTasks] = useState(activities
-    .map(activity => ({ activity, time: 0 })) as Task[]);
+  const [tasks, setTasks] = useState<TasksWithDay[]>([]);
 
   const [activity, setActivity] = useState<Activity>('work');
   const [showTimer, setShowTimer] = useState(true);
   const [lastFocus, setLastFocus] = useState<null | number>(null);
 
   useEffect(() => {
-    const storedTasks = localStorage.getItem('task');
+    const storedTasks = localStorage.getItem('tasks');
     if (storedTasks) {
-      setTasks(JSON.parse(storedTasks));
+      const parsed = JSON.parse(storedTasks) as TasksWithDay[];
+      setTasks(parsed);
+    }
+    else {
+      setTasks([emptyTodayTask]);
     }
   }, []);
 
@@ -65,39 +83,66 @@ const App = () => {
   };
 
   const handleExitStopwatch = (seconds: number) => {
-    const updatedTasks = tasks.map(t =>
-      t.activity === activity ? { ...t, time: t.time + seconds } : t);
+    //if today is now stored adding today first
+    if (!tasks.find(t => t.day === nowString())) {
+      setTasks(tasks => tasks.concat([emptyTodayTask]));
+    }
+
+    setTasks(tasks => {
+      const updatedTasks = tasks.map(t => {
+        if (t.day === nowString()) {
+          return {
+            day: t.day,
+            tasks: t.tasks.map(task => task.activity === activity
+              ? { ...task, time: task.time + seconds }
+              : task)
+          };
+        }
+        else {
+          return t;
+        }
+      });
+
+      localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+      return updatedTasks;
+    });
+
     setLastFocus(seconds);
-    setTasks(updatedTasks);
-    localStorage.setItem('task', JSON.stringify(updatedTasks));
   };
 
   const handleActivitySelect = (e: SelectChangeEvent) =>
     setActivity(e.target.value as Activity);
 
-  const selectedTask = tasks.find(a => a.activity === activity);
+  const selectedTask = tasks
+    .find(a => a.day === nowString())
+    ?.tasks.find(t => t.activity === activity);
 
-  const tasksTable = () => <TableContainer component={Paper}>
-    <Table aria-label="simple table">
-      <TableHead>
-        <TableRow>
-          <TableCell>Activity</TableCell>
-          <TableCell align="right">Seconds</TableCell>
-        </TableRow>
-      </TableHead>
-      {tasks.map((task) => (
-        <TableRow
-          key={task.activity}
-        >
-          <TableCell component="th" scope="row">
-            {task.activity}
-          </TableCell>
-          <TableCell align="right">
-            {task.time}
-          </TableCell>
-        </TableRow>))}
-    </Table>
-  </TableContainer>;
+  const tasksTable = () =>
+    <TableContainer style={{ maxHeight: 360 }} component={Paper}>
+      <Table aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Day</TableCell>
+            <TableCell>Reading</TableCell>
+            <TableCell>Work</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {tasks.map((task) => (
+            <TableRow
+              key={task.day}
+            >
+              <TableCell component="th" scope="row">
+                {task.day}
+              </TableCell>
+              {task.tasks.map(t =>
+                <TableCell key={t.activity} component="th" scope="row">
+                  {t.time}
+                </TableCell>)}
+            </TableRow>))}
+        </TableBody>
+      </Table>
+    </TableContainer>;
 
   return (
     <Grid
@@ -108,7 +153,7 @@ const App = () => {
       justifyContent="center"
       sx={{ minHeight: '100vh' }}
     >
-      <Grid container md={5} alignItems="center" justifyContent="center">
+      <Grid container alignItems="center" justifyContent="center">
         <Grid item>
           <SizedPaper elevation={4}>
             <Box pt={25} m={2}>
