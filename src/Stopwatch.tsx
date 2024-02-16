@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 
 interface StopwatchProps {
-  selectedTask: Task,
+  selectedTask?: Task,
   handleExit: (seconds: number) => void,
 }
 
@@ -27,6 +27,7 @@ const Stopwatch = (props: StopwatchProps) => {
     totalSeconds,
     seconds,
     minutes,
+    hours,
     start,
     pause
   } = useStopwatch({
@@ -51,7 +52,7 @@ const Stopwatch = (props: StopwatchProps) => {
   return (
     <Box display='flex' flexDirection='column'
       alignItems="center" justifyContent="center">
-      <Time minutes={minutes} seconds={seconds}
+      <Time hours={hours} minutes={minutes} seconds={seconds}
         overtime={totalSeconds > focusSeconds} />
       <Box sx={{ width: '60%' }}>
         <Stack direction="row" spacing={2}>
@@ -60,8 +61,9 @@ const Stopwatch = (props: StopwatchProps) => {
               setFocusSeconds(parseInt(event.target.value))
             }
             disabled={started} label="Duration" variant="outlined" />
-          <Button variant='outlined' onClick={() => handlePauseClick()}>
-            Start
+          <Button variant='outlined'
+            onClick={() => handlePauseClick()}>
+            {paused ? 'Start' : 'Pause'}
           </Button>
           <Button variant='outlined' onClick={() => handleExitClick()}>
             Rest
@@ -69,7 +71,7 @@ const Stopwatch = (props: StopwatchProps) => {
         </Stack>
       </Box>
       <Typography textAlign='center' color='textSecondary' variant="subtitle1">
-        task: {selectedTask.activity}
+        task: {selectedTask?.activity}
       </Typography>
     </Box>
   );

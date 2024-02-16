@@ -62,7 +62,12 @@ const App = () => {
     const storedTasks = localStorage.getItem('tasks');
     if (storedTasks) {
       const parsed = JSON.parse(storedTasks) as TasksWithDay[];
-      setTasks(parsed);
+      //if today is now stored adding today
+      if (!parsed.find(t => t.day === nowString())) {
+        setTasks(parsed.concat([emptyTodayTask]));
+      } else {
+        setTasks(parsed);
+      }
     }
     else {
       setTasks([emptyTodayTask]);
@@ -83,11 +88,6 @@ const App = () => {
   };
 
   const handleExitStopwatch = (seconds: number) => {
-    //if today is now stored adding today first
-    if (!tasks.find(t => t.day === nowString())) {
-      setTasks(tasks => tasks.concat([emptyTodayTask]));
-    }
-
     setTasks(tasks => {
       const updatedTasks = tasks.map(t => {
         if (t.day === nowString()) {
@@ -157,12 +157,11 @@ const App = () => {
         <Grid item>
           <SizedPaper elevation={4}>
             <Box pt={25} m={2}>
-              {showTimer && selectedTask
+              {showTimer
                 ? <>
                   {lastFocus
                     ? <Timer
                       lastFocus={lastFocus}
-                      selectedTask={selectedTask}
                       handleExit={handleExitTimer}
                     />
                     : <Stopwatch

@@ -1,12 +1,10 @@
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
-import { Task } from './App';
 import { Time } from './Time';
 import Typography from '@mui/material/Typography';
 import { useTimer } from 'react-timer-hook';
 
 interface TimerProps {
-  selectedTask: Task,
   handleExit: () => void,
   lastFocus: number
 }
@@ -26,6 +24,7 @@ const Timer = (props: TimerProps) => {
   const {
     seconds,
     minutes,
+    hours
   } = useTimer({
     autoStart: true,
     expiryTimestamp: timeRest,
@@ -39,7 +38,7 @@ const Timer = (props: TimerProps) => {
   return (
     <Box display='flex' flexDirection='column'
       alignItems="center" justifyContent="center">
-      <Time minutes={minutes} seconds={seconds} />
+      <Time hours={hours} minutes={minutes} seconds={seconds} />
       <Button variant='outlined' onClick={() => handleExitClick()}>
         End rest
       </Button>
