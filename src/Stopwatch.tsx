@@ -19,8 +19,9 @@ const Stopwatch = (props: StopwatchProps) => {
   const baseDuration = 30;
   const [paused, setPaused] = useState(true);
   const [started, setStarted] = useState(false);
-  const [focusSeconds, setFocusSeconds] = useState(baseDuration);
+  const [focusTime, setFocusTime] = useState(baseDuration);
   const timeFocus = new Date();
+  const focusSeconds = focusTime * 60;
   timeFocus.setSeconds(timeFocus.getSeconds() + focusSeconds);
 
   const {
@@ -53,14 +54,14 @@ const Stopwatch = (props: StopwatchProps) => {
     <Box display='flex' flexDirection='column'
       alignItems="center" justifyContent="center">
       <Time hours={hours} minutes={minutes} seconds={seconds}
-        overtime={totalSeconds > focusSeconds} />
+        overtime={totalSeconds >= focusSeconds} />
       <Box sx={{ width: '60%' }}>
         <Stack direction="row" spacing={2}>
-          <TextField value={focusSeconds} size='small'
+          <TextField value={focusTime} size='small'
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              setFocusSeconds(parseInt(event.target.value))
+              setFocusTime(parseInt(event.target.value))
             }
-            disabled={started} label="Duration" variant="outlined" />
+            disabled={started} label="Duration, min" variant="outlined" />
           <Button variant='outlined'
             onClick={() => handlePauseClick()}>
             {paused ? 'Start' : 'Pause'}

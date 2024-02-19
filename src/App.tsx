@@ -137,7 +137,7 @@ const App = () => {
               </TableCell>
               {task.tasks.map(t =>
                 <TableCell key={t.activity} component="th" scope="row">
-                  {t.time}
+                  {Math.floor(t.time / 60)}
                 </TableCell>)}
             </TableRow>))}
         </TableBody>
