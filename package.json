@@ -12,6 +12,7 @@
   "dependencies": {
     "@babel/preset-env": "^7.23.9",
     "@babel/preset-react": "^7.23.3",
+    "@babel/preset-typescript": "^7.23.3",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.7",
