@@ -12,7 +12,7 @@ interface TimeProps {
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const Time = (props: TimeProps) => {
-  const [showSeconds, setShowSeconds] = useState(true);
+  const [showSeconds, setShowSeconds] = useState(false);
   const { hours, minutes, seconds, overtime } = props;
 
   const minutesSum = minutes + hours * 60;
