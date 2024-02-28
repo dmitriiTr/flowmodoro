@@ -57,12 +57,12 @@ const Stopwatch = (props: StopwatchProps) => {
         overtime={totalSeconds >= focusSeconds} />
       <Box sx={{ width: '60%' }}>
         <Stack direction="row" spacing={2}>
-          <TextField value={focusTime} size='small'
+          <TextField data-testid="input-minutes" value={focusTime} size='small'
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
               setFocusTime(parseInt(event.target.value))
             }
             disabled={started} label="Duration, min" variant="outlined" />
-          <Button variant='outlined'
+          <Button data-testid="start-button" variant='outlined'
             onClick={() => handlePauseClick()}>
             {paused ? 'Start' : 'Pause'}
           </Button>

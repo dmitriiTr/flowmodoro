@@ -1,11 +1,19 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 
 import App from './App';
+import userEvent from '@testing-library/user-event';
 
-describe('TEST APP', () => {
-  test('renders learn react link', () => {
+describe('App test', () => {
+  test('disables input when stopwatch starts', async () => {
     render(<App />);
-    const helloWorldElem = screen.getByText(/start/i);
-    expect(helloWorldElem).toBeInTheDocument();
+    const startButton = screen.getByTestId('start-button');
+    userEvent.click(startButton);
+    expect(startButton).toBeInTheDocument();
+
+    await waitFor(() => {
+      const innerInput =
+        screen.getByTestId('input-minutes').children[1].firstChild;
+      expect(innerInput).toHaveAttribute('disabled');
+    });
   });
 });
