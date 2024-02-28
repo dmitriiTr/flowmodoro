@@ -47,20 +47,22 @@ const Stopwatch = (props: StopwatchProps) => {
       alignItems="center" justifyContent="center">
       <Time hours={hours} minutes={minutes} seconds={seconds}
         overtime={totalSeconds >= focusSeconds} />
-      <Box sx={{ width: '60%' }}>
+      <Box sx={{ width: '40%' }}>
         <Stack direction="row" spacing={2}>
           <TextField value={focusTime} size='small' data-testid="input-minutes"
             autoFocus onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
               setFocusTime(parseInt(event.target.value))
             }
             disabled={started} label="Duration, min" variant="outlined" />
-          <Button variant='outlined' disabled={started}
-            data-testid="start-button" onClick={() => handleStartClick()}>
-            Start
-          </Button>
-          <Button variant='outlined' onClick={() => handleExitClick()}>
-            Rest
-          </Button>
+          {started
+            ? <Button variant='outlined' onClick={() => handleExitClick()}>
+              Rest
+            </Button>
+            : <Button variant='outlined' disabled={started}
+              data-testid="start-button" onClick={() => handleStartClick()}>
+              Start
+            </Button>}
+
         </Stack>
       </Box>
       <Typography textAlign='center' color='textSecondary' variant="subtitle1">
