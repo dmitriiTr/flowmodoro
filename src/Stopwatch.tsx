@@ -17,7 +17,6 @@ const Stopwatch = (props: StopwatchProps) => {
   const { selectedTask, handleExit } = props;
 
   const baseDuration = 30;
-  const [paused, setPaused] = useState(true);
   const [started, setStarted] = useState(false);
   const [focusTime, setFocusTime] = useState(baseDuration);
   const timeFocus = new Date();
@@ -30,20 +29,13 @@ const Stopwatch = (props: StopwatchProps) => {
     minutes,
     hours,
     start,
-    pause
   } = useStopwatch({
     autoStart: false,
   });
 
-  const handlePauseClick = () => {
-    if (!paused) {
-      pause();
-    }
-    else {
-      start();
-      setStarted(true);
-    }
-    setPaused(!paused);
+  const handleStartClick = () => {
+    start();
+    setStarted(true);
   };
 
   const handleExitClick = () => {
@@ -57,14 +49,14 @@ const Stopwatch = (props: StopwatchProps) => {
         overtime={totalSeconds >= focusSeconds} />
       <Box sx={{ width: '60%' }}>
         <Stack direction="row" spacing={2}>
-          <TextField data-testid="input-minutes" value={focusTime} size='small'
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          <TextField value={focusTime} size='small' data-testid="input-minutes"
+            autoFocus onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
               setFocusTime(parseInt(event.target.value))
             }
             disabled={started} label="Duration, min" variant="outlined" />
-          <Button data-testid="start-button" variant='outlined'
-            onClick={() => handlePauseClick()}>
-            {paused ? 'Start' : 'Pause'}
+          <Button variant='outlined' disabled={started}
+            data-testid="start-button" onClick={() => handleStartClick()}>
+            Start
           </Button>
           <Button variant='outlined' onClick={() => handleExitClick()}>
             Rest
