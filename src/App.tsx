@@ -14,6 +14,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 
@@ -161,19 +162,31 @@ const App = () => {
       <Grid container alignItems="center" justifyContent="center">
         <Grid item>
           <SizedPaper elevation={4}>
-            <Box pt={25} m={2}>
+            <Box pt={15} m={2}>
               {showTimer
                 ? <>
                   {lastFocus
-                    ? <Timer
-                      lastFocus={lastFocus}
-                      handleExit={handleExitTimer}
-                    />
-                    : <Stopwatch
-                      selectedTask={selectedTask}
-                      handleExit={handleExitStopwatch}
-                    />}
-                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    ? <>
+                      <Typography textAlign='center'
+                        color='textSecondary' variant="h4">
+                        Task: Rest
+                      </Typography>
+                      <Timer
+                        lastFocus={lastFocus}
+                        handleExit={handleExitTimer}
+                      />
+                    </>
+                    : <>
+                      <Typography textAlign='center'
+                        color='textSecondary' variant="h4">
+                        Task: {selectedTask?.activity}
+                      </Typography>
+                      <Stopwatch
+                        handleExit={handleExitStopwatch}
+                      />
+                    </>}
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}
+                    pt={5}>
                     <Button variant='contained' onClick={() => handleReturn()}>
                       Exit
                     </Button>

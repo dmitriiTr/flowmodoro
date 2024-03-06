@@ -14,7 +14,7 @@ const Timer = (props: TimerProps) => {
   const { handleExit, lastFocus } = props;
 
   const timeRest = new Date();
-  const restSeconds = lastFocus / 5; // lastFocus / 5
+  const restSeconds = lastFocus / 5;
   timeRest.setSeconds(timeRest.getSeconds() + restSeconds);
 
   const onExpire = () => {
@@ -35,16 +35,19 @@ const Timer = (props: TimerProps) => {
     handleExit();
   };
 
+  const isTimeUp = hours === 0 && minutes === 0 && seconds === 0;
+
   return (
-    <Box display='flex' flexDirection='column'
+    <Box display='flex' flexDirection='column' pt={6}
       alignItems="center" justifyContent="center">
-      <Time hours={hours} minutes={minutes} seconds={seconds} />
+      {isTimeUp
+        ? <Typography display={'inline'} textAlign='center' variant='h1'>
+          Time Up
+        </Typography>
+        : <Time hours={hours} minutes={minutes} seconds={seconds} />}
       <Button variant='outlined' onClick={() => handleExitClick()}>
         End rest
       </Button>
-      <Typography textAlign='center' color="textSecondary" variant="subtitle1">
-        rest
-      </Typography>
     </Box>
   );
 };

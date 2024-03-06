@@ -1,20 +1,17 @@
 import { Box, Stack, TextField } from '@mui/material';
 
 import Button from '@mui/material/Button';
-import { Task } from './App';
 import { Time } from './Time';
-import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 
 interface StopwatchProps {
-  selectedTask?: Task,
   handleExit: (seconds: number) => void,
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const Stopwatch = (props: StopwatchProps) => {
-  const { selectedTask, handleExit } = props;
+  const { handleExit } = props;
 
   const baseDuration = 30;
   const [started, setStarted] = useState(false);
@@ -43,7 +40,7 @@ const Stopwatch = (props: StopwatchProps) => {
   };
 
   return (
-    <Box display='flex' flexDirection='column'
+    <Box display='flex' flexDirection='column' pt={6}
       alignItems="center" justifyContent="center">
       <Time hours={hours} minutes={minutes} seconds={seconds}
         overtime={totalSeconds >= focusSeconds} />
@@ -62,12 +59,8 @@ const Stopwatch = (props: StopwatchProps) => {
               onClick={() => handleStartClick()}>
               Start
             </Button>}
-
         </Stack>
       </Box>
-      <Typography textAlign='center' color='textSecondary' variant="subtitle1">
-        task: {selectedTask?.activity}
-      </Typography>
     </Box>
   );
 };
