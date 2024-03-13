@@ -1,8 +1,11 @@
+import AlarmSound from './alarm.mp3';
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Time } from './Time';
 import Typography from '@mui/material/Typography';
 import { useTimer } from 'react-timer-hook';
+
+const alarm = new Audio(AlarmSound);
 
 interface TimerProps {
   handleExit: () => void,
@@ -18,7 +21,7 @@ const Timer = (props: TimerProps) => {
   timeRest.setSeconds(timeRest.getSeconds() + restSeconds);
 
   const onExpire = () => {
-    console.warn('expired');
+    alarm.play();
   };
 
   const {
