@@ -19,6 +19,7 @@ import {
 import { useEffect, useState } from 'react';
 
 import Button from '@mui/material/Button';
+import React from 'react';
 import Stopwatch from './Stopwatch';
 import Timer from './Timer';
 import { styled } from '@mui/material/styles';
@@ -123,7 +124,8 @@ const App = () => {
     .find(a => a.day === nowString())
     ?.tasks.find(t => t.activity === activity);
 
-  const tasksTable = () =>
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const TasksTable = React.memo(() =>
     <TableContainer style={{ maxHeight: 360 }} component={Paper}>
       <Table aria-label="simple table">
         <TableHead>
@@ -148,7 +150,7 @@ const App = () => {
             </TableRow>))}
         </TableBody>
       </Table>
-    </TableContainer>;
+    </TableContainer>);
 
   return (
     <Grid
@@ -209,7 +211,7 @@ const App = () => {
                         <MenuItem key={a} value={a}>{a}</MenuItem>)}
                     </Select>
                   </FormControl>
-                  {tasksTable()}
+                  <TasksTable />
                 </Box>}
             </Box>
           </SizedPaper>
