@@ -22,7 +22,16 @@ export default defineConfig({
         }
       ]
     },
-    registerType: 'autoUpdate'
+    registerType: 'autoUpdate',
+    // add this to cache all the imports
+    workbox: {
+      globPatterns: ['**/*'],
+    },
+    // add this to cache all the
+    // static assets in the public folder
+    includeAssets: [
+      '**/*',
+    ],
   })],
   server: {
     port: 8000

@@ -5,7 +5,6 @@ import {
   InputLabel,
   MenuItem,
   Paper,
-  PaperProps,
   Select,
   SelectChangeEvent,
   Table,
@@ -22,14 +21,6 @@ import Button from '@mui/material/Button';
 import React from 'react';
 import Stopwatch from './Stopwatch';
 import Timer from './Timer';
-import { styled } from '@mui/material/styles';
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const SizedPaper = styled(Paper)<PaperProps>(() => ({
-  width: 500,
-  height: 500 * 1.4,
-  //color: theme.palette.success.main,
-}));
 
 const activities = ['reading', 'work'] as const;
 type Activity = typeof activities[number];
@@ -163,7 +154,12 @@ const App = () => {
     >
       <Grid container alignItems="center" justifyContent="center">
         <Grid item>
-          <SizedPaper elevation={4}>
+          <Paper elevation={4}
+            sx={(theme) => ({
+              [theme.breakpoints.down('sm')]: { width: 350, height: 350 * 1.4 },
+              [theme.breakpoints.up('sm')]: { width: 500, height: 500 * 1.4 },
+            })}
+          >
             <Box pt={15} m={2}>
               {showTimer
                 ? <>
@@ -214,10 +210,10 @@ const App = () => {
                   <TasksTable />
                 </Box>}
             </Box>
-          </SizedPaper>
+          </Paper>
         </Grid>
       </Grid>
-    </Grid>
+    </Grid >
   );
 };
 
