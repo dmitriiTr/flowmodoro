@@ -1,8 +1,8 @@
 import { Box, Stack, TextField } from '@mui/material';
+import { useState } from 'react';
 
 import Button from '@mui/material/Button';
 import { Time } from './Time';
-import { useState } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 
 interface StopwatchProps {
@@ -14,11 +14,8 @@ const Stopwatch = (props: StopwatchProps) => {
   const { handleExit } = props;
 
   const baseDuration = 30;
-  const [started, setStarted] = useState(false);
   const [focusTime, setFocusTime] = useState(baseDuration);
-  const timeFocus = new Date();
   const focusSeconds = focusTime * 60;
-  timeFocus.setSeconds(timeFocus.getSeconds() + focusSeconds);
 
   const {
     totalSeconds,
@@ -26,13 +23,13 @@ const Stopwatch = (props: StopwatchProps) => {
     minutes,
     hours,
     start,
+    isRunning
   } = useStopwatch({
     autoStart: false,
   });
 
   const handleStartClick = () => {
     start();
-    setStarted(true);
   };
 
   const handleExitClick = () => {
@@ -50,12 +47,12 @@ const Stopwatch = (props: StopwatchProps) => {
             autoFocus onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
               setFocusTime(parseInt(event.target.value))
             }
-            disabled={started} label="Duration, min" variant="outlined" />
-          {started
+            disabled={isRunning} label="Duration, min" variant="outlined" />
+          {isRunning
             ? <Button variant='outlined' onClick={() => handleExitClick()}>
               Rest
             </Button>
-            : <Button variant='outlined' disabled={started}
+            : <Button variant='outlined' disabled={isRunning}
               onClick={() => handleStartClick()}>
               Start
             </Button>}
