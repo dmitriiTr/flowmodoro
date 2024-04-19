@@ -25,4 +25,6 @@ dist-ssr
 
 *.bat
 
+/dev-dist
+
 Flowmodoro.html

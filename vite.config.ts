@@ -5,6 +5,9 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), VitePWA({
+    devOptions: {
+      enabled: true
+    },
     manifest: {
       name: 'Flowmodoro',
       short_name: 'Flowmodoro',
