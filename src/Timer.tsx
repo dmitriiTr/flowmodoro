@@ -43,11 +43,13 @@ const Timer = (props: TimerProps) => {
   return (
     <Box display='flex' flexDirection='column' pt={6}
       alignItems="center" justifyContent="center">
-      {isTimeUp
-        ? <Typography display={'inline'} textAlign='center' variant='h1'>
-          Time Up
-        </Typography>
-        : <Time hours={hours} minutes={minutes} seconds={seconds} />}
+      <Box height={110}>
+        {isTimeUp
+          ? <Typography display={'inline'} textAlign='center' variant='h2'>
+            Time's Up
+          </Typography>
+          : <Time hours={hours} minutes={minutes} seconds={seconds} />}
+      </Box>
       <Button variant='outlined' onClick={() => handleExitClick()}>
         End rest
       </Button>

@@ -68,7 +68,6 @@ const App = () => {
 
     window.addEventListener('beforeunload', e => {
       e.preventDefault();
-      e.returnValue = '';
     });
   }, []);
 
@@ -114,34 +113,6 @@ const App = () => {
   const selectedTask = tasks
     .find(a => a.day === nowString())
     ?.tasks.find(t => t.activity === activity);
-
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const TasksTable = React.memo(() =>
-    <TableContainer style={{ maxHeight: 360 }} component={Paper}>
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Day</TableCell>
-            <TableCell>Reading</TableCell>
-            <TableCell>Work</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {tasks.map((task) => (
-            <TableRow
-              key={task.day}
-            >
-              <TableCell component="th" scope="row">
-                {task.day}
-              </TableCell>
-              {task.tasks.map(t =>
-                <TableCell key={t.activity} component="th" scope="row">
-                  {Math.floor(t.time / 60)}
-                </TableCell>)}
-            </TableRow>))}
-        </TableBody>
-      </Table>
-    </TableContainer>);
 
   return (
     <Grid
@@ -207,7 +178,7 @@ const App = () => {
                         <MenuItem key={a} value={a}>{a}</MenuItem>)}
                     </Select>
                   </FormControl>
-                  <TasksTable />
+                  <TasksTable tasks={tasks} />
                 </Box>}
             </Box>
           </Paper>
@@ -216,6 +187,37 @@ const App = () => {
     </Grid >
   );
 };
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const TasksTable = React.memo(({ tasks }: { tasks: TasksWithDay[] }) =>
+  <TableContainer sx={(theme) => ({
+    [theme.breakpoints.down('sm')]: { height: 250 },
+    [theme.breakpoints.up('sm')]: { height: 360 },
+  })} component={Paper}>
+    <Table aria-label="simple table">
+      <TableHead>
+        <TableRow>
+          <TableCell>Day</TableCell>
+          <TableCell>Reading</TableCell>
+          <TableCell>Work</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {tasks.map((task) => (
+          <TableRow
+            key={task.day}
+          >
+            <TableCell component="th" scope="row">
+              {task.day}
+            </TableCell>
+            {task.tasks.map(t =>
+              <TableCell key={t.activity} component="th" scope="row">
+                {Math.floor(t.time / 60)}
+              </TableCell>)}
+          </TableRow>))}
+      </TableBody>
+    </Table>
+  </TableContainer>);
 
 export default App;
 

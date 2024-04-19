@@ -1,8 +1,8 @@
 import { Box, Stack, TextField } from '@mui/material';
-import { useState } from 'react';
 
 import Button from '@mui/material/Button';
 import { Time } from './Time';
+import { useState } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 
 interface StopwatchProps {
@@ -39,8 +39,10 @@ const Stopwatch = (props: StopwatchProps) => {
   return (
     <Box display='flex' flexDirection='column' pt={6}
       alignItems="center" justifyContent="center">
-      <Time hours={hours} minutes={minutes} seconds={seconds}
-        overtime={totalSeconds >= focusSeconds} />
+      <Box height={110}>
+        <Time hours={hours} minutes={minutes} seconds={seconds}
+          overtime={totalSeconds >= focusSeconds} />
+      </Box>
       <Box sx={{ width: '40%' }}>
         <Stack direction="row" spacing={2}>
           <TextField value={focusTime} size='small'
