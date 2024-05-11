@@ -13,7 +13,7 @@ interface StopwatchProps {
 const Stopwatch = (props: StopwatchProps) => {
   const { handleExit } = props;
 
-  const baseDuration = 30;
+  const baseDuration = 60;
   const [focusTime, setFocusTime] = useState(baseDuration);
   const focusSeconds = focusTime * 60;
 
@@ -45,8 +45,8 @@ const Stopwatch = (props: StopwatchProps) => {
       </Box>
       <Box sx={{ width: '40%' }}>
         <Stack direction="row" spacing={2}>
-          <TextField value={focusTime} size='small'
-            autoFocus onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          <TextField value={isNaN(focusTime) ? '' : focusTime} size='small'
+            autoFocus onChange={event =>
               setFocusTime(parseInt(event.target.value))
             }
             disabled={isRunning} label="Duration, min" variant="outlined" />

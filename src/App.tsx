@@ -37,11 +37,11 @@ export interface TasksWithDay {
 const nowString = () =>
   new Date().toLocaleDateString();
 
-const emptyTodayTask = {
+const emptyTodayTask = () => ({
   day: nowString(),
   tasks: activities
     .map(activity => ({ activity, time: 0 }))
-};
+});
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const App = () => {
@@ -51,21 +51,25 @@ const App = () => {
   const [showTimer, setShowTimer] = useState(true);
   const [lastFocus, setLastFocus] = useState<null | number>(null);
 
+  const isSameDay = tasks[tasks.length - 1]?.day === nowString();
   useEffect(() => {
     const storedTasks = localStorage.getItem('tasks');
     if (storedTasks) {
       const parsed = JSON.parse(storedTasks) as TasksWithDay[];
       //if today is now stored adding today
       if (!parsed.find(t => t.day === nowString())) {
-        setTasks(parsed.concat([emptyTodayTask]));
+        setTasks(parsed.concat([emptyTodayTask()]));
       } else {
         setTasks(parsed);
       }
     }
     else {
-      setTasks([emptyTodayTask]);
+      setTasks([emptyTodayTask()]);
     }
 
+  }, [isSameDay]);
+
+  useEffect(() => {
     window.addEventListener('beforeunload', e => {
       e.preventDefault();
     });
@@ -220,7 +224,3 @@ const TasksTable = React.memo(({ tasks }: { tasks: TasksWithDay[] }) =>
   </TableContainer>);
 
 export default App;
-
-
-//<div style="margin-top: 197px;border-top: 0.1px solid black;width: 150px;"></div>
-//<div style="font-size: 10px;">Время на отдых - пятая часть, потраченная на фокус</div>
