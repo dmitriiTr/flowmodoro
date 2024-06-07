@@ -1,8 +1,8 @@
 import { Box, Stack, TextField } from '@mui/material';
+import { useMemo, useState } from 'react';
 
 import Button from '@mui/material/Button';
 import { Time } from './Time';
-import { useState } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 
 interface StopwatchProps {
@@ -15,7 +15,7 @@ const Stopwatch = (props: StopwatchProps) => {
   const { handleExit, baseDuration } = props;
 
   const [focusTime, setFocusTime] = useState(baseDuration);
-  const focusSeconds = focusTime * 60;
+  const focusSeconds = useMemo(() => focusTime * 60, [focusTime]);
 
   const {
     totalSeconds,

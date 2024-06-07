@@ -1,3 +1,4 @@
+import { Activity, TasksWithDay } from './types';
 import {
   Box,
   FormControl,
@@ -15,34 +16,14 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+import { activities, baseMinDuration } from './constants';
+import { emptyTodayTask, nowString } from './utils';
 import { useEffect, useState } from 'react';
 
 import Button from '@mui/material/Button';
 import React from 'react';
 import Stopwatch from './Stopwatch';
 import Timer from './Timer';
-import { baseMinDuration } from './constants';
-
-const activities = ['reading', 'work'] as const;
-type Activity = typeof activities[number];
-export interface Task {
-  activity: Activity;
-  time: number;
-}
-
-export interface TasksWithDay {
-  day: string,
-  tasks: Task[]
-}
-
-const nowString = () =>
-  new Date().toLocaleDateString();
-
-const emptyTodayTask = () => ({
-  day: nowString(),
-  tasks: activities
-    .map(activity => ({ activity, time: 0 }))
-});
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const App = () => {

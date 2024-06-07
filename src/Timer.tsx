@@ -1,9 +1,9 @@
-import { alarm, restRatio } from './constants';
-
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Time } from './Time';
 import Typography from '@mui/material/Typography';
+import { alarm } from './constants';
+import { getTimeRest } from './utils';
 import { useTimer } from 'react-timer-hook';
 
 interface TimerProps {
@@ -15,10 +15,6 @@ interface TimerProps {
 const Timer = (props: TimerProps) => {
   const { handleExit, lastFocus } = props;
 
-  const timeRest = new Date();
-  const restSeconds = lastFocus / restRatio;
-  timeRest.setSeconds(timeRest.getSeconds() + restSeconds);
-
   const onExpire = () => {
     alarm.play();
   };
@@ -29,7 +25,7 @@ const Timer = (props: TimerProps) => {
     hours
   } = useTimer({
     autoStart: true,
-    expiryTimestamp: timeRest,
+    expiryTimestamp: getTimeRest(lastFocus),
     onExpire
   });
 
