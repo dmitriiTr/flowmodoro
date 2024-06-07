@@ -21,6 +21,7 @@ import Button from '@mui/material/Button';
 import React from 'react';
 import Stopwatch from './Stopwatch';
 import Timer from './Timer';
+import { baseMinDuration } from './constants';
 
 const activities = ['reading', 'work'] as const;
 type Activity = typeof activities[number];
@@ -50,6 +51,7 @@ const App = () => {
   const [activity, setActivity] = useState<Activity>('work');
   const [showTimer, setShowTimer] = useState(true);
   const [lastFocus, setLastFocus] = useState<null | number>(null);
+  const [baseFocusTime, setBaseFocusTime] = useState(baseMinDuration);
 
   const isSameDay = tasks[tasks.length - 1]?.day === nowString();
   useEffect(() => {
@@ -88,7 +90,8 @@ const App = () => {
     setLastFocus(null);
   };
 
-  const handleExitStopwatch = (seconds: number) => {
+  const handleExitStopwatch = (seconds: number, newBaseDuration: number) => {
+    setBaseFocusTime(newBaseDuration);
     setTasks(tasks => {
       const updatedTasks = tasks.map(t => {
         if (t.day === nowString()) {
@@ -156,6 +159,7 @@ const App = () => {
                       </Typography>
                       <Stopwatch
                         handleExit={handleExitStopwatch}
+                        baseDuration={baseFocusTime}
                       />
                     </>}
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}

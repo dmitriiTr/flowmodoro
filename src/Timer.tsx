@@ -1,11 +1,10 @@
-import AlarmSound from './alarm.mp3';
+import { alarm, restRatio } from './constants';
+
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Time } from './Time';
 import Typography from '@mui/material/Typography';
 import { useTimer } from 'react-timer-hook';
-
-const alarm = new Audio(AlarmSound);
 
 interface TimerProps {
   handleExit: () => void,
@@ -17,7 +16,7 @@ const Timer = (props: TimerProps) => {
   const { handleExit, lastFocus } = props;
 
   const timeRest = new Date();
-  const restSeconds = lastFocus / 5;
+  const restSeconds = lastFocus / restRatio;
   timeRest.setSeconds(timeRest.getSeconds() + restSeconds);
 
   const onExpire = () => {

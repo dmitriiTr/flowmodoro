@@ -6,14 +6,14 @@ import { useState } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 
 interface StopwatchProps {
-  handleExit: (seconds: number) => void,
+  baseDuration: number;
+  handleExit: (seconds: number, newBaseDuration: number) => void,
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const Stopwatch = (props: StopwatchProps) => {
-  const { handleExit } = props;
+  const { handleExit, baseDuration } = props;
 
-  const baseDuration = 60;
   const [focusTime, setFocusTime] = useState(baseDuration);
   const focusSeconds = focusTime * 60;
 
@@ -33,7 +33,7 @@ const Stopwatch = (props: StopwatchProps) => {
   };
 
   const handleExitClick = () => {
-    handleExit(totalSeconds);
+    handleExit(totalSeconds, focusTime);
   };
 
   return (
