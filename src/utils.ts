@@ -13,3 +13,5 @@ export const getTimeRest = (lastFocus: number) => {
   timeRest.setSeconds(timeRest.getSeconds() + restSeconds);
   return timeRest;
 };
+
+export const formatTime = (time: number) => time < 10 ? '0' + time : time;

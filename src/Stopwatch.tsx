@@ -1,8 +1,9 @@
 import { Box, Stack, TextField } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import Button from '@mui/material/Button';
 import { Time } from './Time';
+import { alarm } from './constants';
 import { useStopwatch } from 'react-timer-hook';
 
 interface StopwatchProps {
@@ -27,6 +28,19 @@ const Stopwatch = (props: StopwatchProps) => {
   } = useStopwatch({
     autoStart: false,
   });
+  const isOvertime = totalSeconds >= focusSeconds;
+
+  useEffect(() => {
+    let interval: number | null = null;
+    if (isOvertime) {
+      interval = setInterval(() => alarm.play(), 30 * 60 * 1000);
+    }
+    return () => {
+      if(interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isOvertime]);
 
   const handleStartClick = () => {
     start();
@@ -41,7 +55,7 @@ const Stopwatch = (props: StopwatchProps) => {
       alignItems="center" justifyContent="center">
       <Box height={110}>
         <Time hours={hours} minutes={minutes} seconds={seconds}
-          overtime={totalSeconds >= focusSeconds} />
+          overtime={isOvertime} />
       </Box>
       <Box sx={{ width: '40%' }}>
         <Stack direction="row" spacing={2}>

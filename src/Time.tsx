@@ -1,7 +1,6 @@
 import Typography from '@mui/material/Typography';
+import { formatTime } from './utils';
 import { useState } from 'react';
-
-const formatTime = (time: number) => time < 10 ? '0' + time : time;
 
 interface TimeProps {
   hours: number,
