@@ -15,3 +15,6 @@ export const getTimeRest = (lastFocus: number) => {
 };
 
 export const formatTime = (time: number) => time < 10 ? '0' + time : time;
+
+export const secondsToRoundedMinutes = (seconds: number) =>
+  Math.floor(seconds / 60);

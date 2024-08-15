@@ -36,7 +36,7 @@ const Timer = (props: TimerProps) => {
   const isTimeUp = hours === 0 && minutes === 0 && seconds === 0;
 
   return (
-    <Box display='flex' flexDirection='column' pt={6}
+    <Box display='flex' flexDirection='column'
       alignItems="center" justifyContent="center">
       <Box height={110}>
         {isTimeUp

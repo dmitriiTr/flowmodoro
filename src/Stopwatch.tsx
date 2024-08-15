@@ -46,12 +46,18 @@ const Stopwatch = (props: StopwatchProps) => {
     start();
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if(event.key === 'Enter') {
+      start();
+    }
+  };
+
   const handleExitClick = () => {
     handleExit(totalSeconds, focusTime);
   };
 
   return (
-    <Box display='flex' flexDirection='column' pt={6}
+    <Box display='flex' flexDirection='column'
       alignItems="center" justifyContent="center">
       <Box height={110}>
         <Time hours={hours} minutes={minutes} seconds={seconds}
@@ -60,6 +66,7 @@ const Stopwatch = (props: StopwatchProps) => {
       <Box sx={{ width: '40%' }}>
         <Stack direction="row" spacing={2}>
           <TextField value={isNaN(focusTime) ? '' : focusTime} size='small'
+            onKeyDown={handleKeyDown}
             autoFocus onChange={event =>
               setFocusTime(parseInt(event.target.value))
             }
