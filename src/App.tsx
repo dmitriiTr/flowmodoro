@@ -1,4 +1,5 @@
 import { Activity, TasksWithDay } from './types';
+import { BASE_FOCUS_DURATION_MINUTES, activities } from './constants';
 import {
   Box,
   FormControl,
@@ -10,7 +11,6 @@ import {
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
-import { activities, baseMinDuration } from './constants';
 import { emptyTodayTask, nowString, secondsToRoundedMinutes } from './utils';
 import { useEffect, useState } from 'react';
 
@@ -26,7 +26,9 @@ const App = () => {
   const [activity, setActivity] = useState<Activity>('work');
   const [showTimer, setShowTimer] = useState(true);
   const [lastFocusTime, setLastFocus] = useState<null | number>(null);
-  const [baseFocusTime, setBaseFocusTime] = useState(baseMinDuration);
+  const [baseFocusTime, setBaseFocusTime] = useState(
+    BASE_FOCUS_DURATION_MINUTES
+  );
 
   const isSameDay = tasks[tasks.length - 1]?.day === nowString();
   useEffect(() => {

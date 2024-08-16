@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography';
-import { formatTime } from './utils';
+import { formatTimeWithSeconds } from './utils';
 import { useState } from 'react';
 
 interface TimeProps {
@@ -21,12 +21,13 @@ export const Time = (props: TimeProps) => {
       color={overtime ? 'primary' : undefined}
       onClick={() => setShowSeconds(show => !show)}>
       {showSeconds
-        ? `${formatTime(minutesSum)}:${formatTime(seconds)}`
+        ? formatTimeWithSeconds(minutesSum, seconds)
         : <>
           {minutesSum}
           <Typography display={'inline'} textAlign='center' variant='body1'>
             min
-          </Typography></>}
+          </Typography>
+        </>}
     </Typography>
   </>;
 };

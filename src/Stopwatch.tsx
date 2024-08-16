@@ -56,6 +56,11 @@ const Stopwatch = (props: StopwatchProps) => {
     handleExit(totalSeconds, focusTime);
   };
 
+  const handleChange =
+    (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+      setFocusTime(parseInt(event.target.value));
+    };
+
   return (
     <Box display='flex' flexDirection='column'
       alignItems="center" justifyContent="center">
@@ -66,10 +71,8 @@ const Stopwatch = (props: StopwatchProps) => {
       <Box sx={{ width: '40%' }}>
         <Stack direction="row" spacing={2}>
           <TextField value={isNaN(focusTime) ? '' : focusTime} size='small'
-            onKeyDown={handleKeyDown}
-            autoFocus onChange={event =>
-              setFocusTime(parseInt(event.target.value))
-            }
+            onKeyDown={e => handleKeyDown(e)}
+            autoFocus onChange={e => handleChange(e)}
             disabled={isRunning} label="Duration, min" variant="outlined" />
           {isRunning
             ? <Button variant='outlined' onClick={() => handleExitClick()}>
