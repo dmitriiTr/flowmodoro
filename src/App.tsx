@@ -19,7 +19,6 @@ import Stopwatch from './Stopwatch';
 import { TasksTable } from './TasksTable';
 import Timer from './Timer';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const App = () => {
   const [tasks, setTasks] = useState<TasksWithDay[]>([]);
 

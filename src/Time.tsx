@@ -9,7 +9,6 @@ interface TimeProps {
   overtime?: boolean
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const Time = (props: TimeProps) => {
   const [showSeconds, setShowSeconds] = useState(false);
   const { hours, minutes, seconds, overtime } = props;

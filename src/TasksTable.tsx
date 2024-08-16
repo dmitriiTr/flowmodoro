@@ -12,7 +12,6 @@ import React from 'react';
 import { TasksWithDay } from './types';
 import { secondsToRoundedMinutes } from './utils';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const TasksTable = React.memo(({ tasks }: { tasks: TasksWithDay[] }) =>
   <TableContainer sx={(theme) => ({
     [theme.breakpoints.down('sm')]: { height: 250, margin: 2 },

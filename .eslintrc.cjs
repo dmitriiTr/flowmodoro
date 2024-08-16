@@ -16,7 +16,13 @@ module.exports = {
     ],
     "no-unused-expressions": 1,
     "curly": 1,
-    "@typescript-eslint/naming-convention": 1,
+    "@typescript-eslint/naming-convention": [
+      "warn",
+      {
+        "selector": "function",
+        "format": ["PascalCase", "camelCase"]
+      }
+    ],
     "semi": 1,
     "eqeqeq": 1,
     "indent": [1, 2],
@@ -32,6 +38,13 @@ module.exports = {
       "expression",
       { "allowArrowFunctions": true }
     ],
-    "max-len": 1
+    "max-len": 1,
+    "no-restricted-syntax": [
+      "error",
+      {
+        selector: "CallExpression[callee.name='useEffect'][arguments.length!=2]",
+        message: "useLayoutEffect must always be invoked with two arguments.",
+      },
+    ],
   },
 }
