@@ -172,7 +172,7 @@ const App = () => {
                         <MenuItem key={a} value={a}>{a}</MenuItem>)}
                     </Select>
                   </FormControl>
-                  <TasksTable tasks={tasks} />
+                  <TasksTable tasks={tasks.toReversed()} />
                 </Box>}
             </Box>
           </Paper>
