@@ -11,7 +11,6 @@ interface TimerProps {
   lastFocus: number
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const Timer = (props: TimerProps) => {
   const { handleExit, lastFocus } = props;
 
@@ -36,7 +35,7 @@ const Timer = (props: TimerProps) => {
   const isTimeUp = hours === 0 && minutes === 0 && seconds === 0;
 
   return (
-    <Box display='flex' flexDirection='column' pt={6}
+    <Box display='flex' flexDirection='column'
       alignItems="center" justifyContent="center">
       <Box height={110}>
         {isTimeUp

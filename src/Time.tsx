@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography';
-import { formatTime } from './utils';
+import { formatTimeWithSeconds } from './utils';
 import { useState } from 'react';
 
 interface TimeProps {
@@ -9,7 +9,6 @@ interface TimeProps {
   overtime?: boolean
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const Time = (props: TimeProps) => {
   const [showSeconds, setShowSeconds] = useState(false);
   const { hours, minutes, seconds, overtime } = props;
@@ -21,12 +20,13 @@ export const Time = (props: TimeProps) => {
       color={overtime ? 'primary' : undefined}
       onClick={() => setShowSeconds(show => !show)}>
       {showSeconds
-        ? `${formatTime(minutesSum)}:${formatTime(seconds)}`
+        ? formatTimeWithSeconds(minutesSum, seconds)
         : <>
           {minutesSum}
           <Typography display={'inline'} textAlign='center' variant='body1'>
             min
-          </Typography></>}
+          </Typography>
+        </>}
     </Typography>
   </>;
 };

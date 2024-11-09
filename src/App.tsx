@@ -1,4 +1,5 @@
 import { Activity, TasksWithDay } from './types';
+import { BASE_FOCUS_DURATION_MINUTES, activities } from './constants';
 import {
   Box,
   FormControl,
@@ -8,31 +9,25 @@ import {
   Paper,
   Select,
   SelectChangeEvent,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Typography,
 } from '@mui/material';
-import { activities, baseMinDuration } from './constants';
-import { emptyTodayTask, nowString } from './utils';
+import { emptyTodayTask, nowString, secondsToRoundedMinutes } from './utils';
 import { useEffect, useState } from 'react';
 
 import Button from '@mui/material/Button';
-import React from 'react';
 import Stopwatch from './Stopwatch';
+import { TasksTable } from './TasksTable';
 import Timer from './Timer';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const App = () => {
   const [tasks, setTasks] = useState<TasksWithDay[]>([]);
 
   const [activity, setActivity] = useState<Activity>('work');
   const [showTimer, setShowTimer] = useState(true);
-  const [lastFocus, setLastFocus] = useState<null | number>(null);
-  const [baseFocusTime, setBaseFocusTime] = useState(baseMinDuration);
+  const [lastFocusTime, setLastFocus] = useState<null | number>(null);
+  const [baseFocusTime, setBaseFocusTime] = useState(
+    BASE_FOCUS_DURATION_MINUTES
+  );
 
   const isSameDay = tasks[tasks.length - 1]?.day === nowString();
   useEffect(() => {
@@ -119,32 +114,42 @@ const App = () => {
               [theme.breakpoints.up('sm')]: { width: 500, height: 500 * 1.4 },
             })}
           >
-            <Box pt={15} m={2}>
+            <Box pt={15} m={2} display={'flex'} flexDirection={'column'}
+              gap={5} justifyContent={'start'}>
               {showTimer
                 ? <>
-                  {lastFocus
+                  {lastFocusTime
                     ? <>
-                      <Typography textAlign='center'
-                        color='textSecondary' variant="h4">
-                        Task: Rest
-                      </Typography>
+                      <Box height={65}>
+                        <Typography textAlign='center'
+                          color='textSecondary' variant="h4">
+                          Task: Rest
+                        </Typography>
+                        <Typography textAlign='center'
+                          color='textSecondary' variant="subtitle2">
+                          focused for{' '}
+                          {secondsToRoundedMinutes(selectedTask?.time ?? 0)} min
+                        </Typography>
+                      </Box>
                       <Timer
-                        lastFocus={lastFocus}
+                        lastFocus={lastFocusTime}
                         handleExit={handleExitTimer}
                       />
                     </>
                     : <>
-                      <Typography textAlign='center'
-                        color='textSecondary' variant="h4">
-                        Task: {selectedTask?.activity}
-                      </Typography>
+                      <Box height={65}>
+                        <Typography textAlign='center'
+                          color='textSecondary' variant="h4">
+                          Task: {selectedTask?.activity}
+                        </Typography>
+                      </Box>
                       <Stopwatch
                         handleExit={handleExitStopwatch}
                         baseDuration={baseFocusTime}
                       />
                     </>}
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}
-                    pt={5}>
+                  >
                     <Button variant='contained' onClick={() => handleReturn()}>
                       Exit
                     </Button>
@@ -167,7 +172,7 @@ const App = () => {
                         <MenuItem key={a} value={a}>{a}</MenuItem>)}
                     </Select>
                   </FormControl>
-                  <TasksTable tasks={tasks} />
+                  <TasksTable tasks={tasks.toReversed()} />
                 </Box>}
             </Box>
           </Paper>
@@ -176,36 +181,5 @@ const App = () => {
     </Grid >
   );
 };
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const TasksTable = React.memo(({ tasks }: { tasks: TasksWithDay[] }) =>
-  <TableContainer sx={(theme) => ({
-    [theme.breakpoints.down('sm')]: { height: 250 },
-    [theme.breakpoints.up('sm')]: { height: 360 },
-  })} component={Paper}>
-    <Table aria-label="simple table">
-      <TableHead>
-        <TableRow>
-          <TableCell>Day</TableCell>
-          <TableCell>Reading</TableCell>
-          <TableCell>Work</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {tasks.map((task) => (
-          <TableRow
-            key={task.day}
-          >
-            <TableCell component="th" scope="row">
-              {task.day}
-            </TableCell>
-            {task.tasks.map(t =>
-              <TableCell key={t.activity} component="th" scope="row">
-                {Math.floor(t.time / 60)}
-              </TableCell>)}
-          </TableRow>))}
-      </TableBody>
-    </Table>
-  </TableContainer>);
 
 export default App;

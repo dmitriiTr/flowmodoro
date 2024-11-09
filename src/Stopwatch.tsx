@@ -11,7 +11,6 @@ interface StopwatchProps {
   handleExit: (seconds: number, newBaseDuration: number) => void,
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const Stopwatch = (props: StopwatchProps) => {
   const { handleExit, baseDuration } = props;
 
@@ -46,12 +45,23 @@ const Stopwatch = (props: StopwatchProps) => {
     start();
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if(event.key === 'Enter') {
+      start();
+    }
+  };
+
   const handleExitClick = () => {
     handleExit(totalSeconds, focusTime);
   };
 
+  const handleChange =
+    (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+      setFocusTime(parseInt(event.target.value));
+    };
+
   return (
-    <Box display='flex' flexDirection='column' pt={6}
+    <Box display='flex' flexDirection='column'
       alignItems="center" justifyContent="center">
       <Box height={110}>
         <Time hours={hours} minutes={minutes} seconds={seconds}
@@ -60,9 +70,8 @@ const Stopwatch = (props: StopwatchProps) => {
       <Box sx={{ width: '40%' }}>
         <Stack direction="row" spacing={2}>
           <TextField value={isNaN(focusTime) ? '' : focusTime} size='small'
-            autoFocus onChange={event =>
-              setFocusTime(parseInt(event.target.value))
-            }
+            onKeyDown={e => handleKeyDown(e)}
+            autoFocus onChange={e => handleChange(e)}
             disabled={isRunning} label="Duration, min" variant="outlined" />
           {isRunning
             ? <Button variant='outlined' onClick={() => handleExitClick()}>
