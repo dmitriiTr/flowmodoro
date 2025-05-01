@@ -40,11 +40,9 @@ const App = () => {
       } else {
         setTasks(parsed);
       }
-    }
-    else {
+    } else {
       setTasks([emptyTodayTask()]);
     }
-
   }, [isSameDay]);
 
   useEffect(() => {
@@ -73,12 +71,13 @@ const App = () => {
         if (t.day === nowString()) {
           return {
             day: t.day,
-            tasks: t.tasks.map(task => task.activity === activity
-              ? { ...task, time: task.time + seconds }
-              : task)
+            tasks: t.tasks.map(task =>
+              task.activity === activity
+                ? { ...task, time: task.time + seconds }
+                : task
+            ),
           };
-        }
-        else {
+        } else {
           return t;
         }
       });
@@ -108,25 +107,38 @@ const App = () => {
     >
       <Grid container alignItems="center" justifyContent="center">
         <Grid item>
-          <Paper elevation={4}
-            sx={(theme) => ({
+          <Paper
+            elevation={4}
+            sx={theme => ({
               [theme.breakpoints.down('sm')]: { width: 350, height: 350 * 1.4 },
               [theme.breakpoints.up('sm')]: { width: 500, height: 500 * 1.4 },
             })}
           >
-            <Box pt={15} m={2} display={'flex'} flexDirection={'column'}
-              gap={5} justifyContent={'start'}>
-              {showTimer
-                ? <>
-                  {lastFocusTime
-                    ? <>
+            <Box
+              pt={15}
+              m={2}
+              display={'flex'}
+              flexDirection={'column'}
+              gap={5}
+              justifyContent={'start'}
+            >
+              {showTimer ? (
+                <>
+                  {lastFocusTime ? (
+                    <>
                       <Box height={65}>
-                        <Typography textAlign='center'
-                          color='textSecondary' variant="h4">
+                        <Typography
+                          textAlign="center"
+                          color="textSecondary"
+                          variant="h4"
+                        >
                           Task: Rest
                         </Typography>
-                        <Typography textAlign='center'
-                          color='textSecondary' variant="subtitle2">
+                        <Typography
+                          textAlign="center"
+                          color="textSecondary"
+                          variant="subtitle2"
+                        >
                           focused for{' '}
                           {secondsToRoundedMinutes(selectedTask?.time ?? 0)} min
                         </Typography>
@@ -136,10 +148,14 @@ const App = () => {
                         handleExit={handleExitTimer}
                       />
                     </>
-                    : <>
+                  ) : (
+                    <>
                       <Box height={65}>
-                        <Typography textAlign='center'
-                          color='textSecondary' variant="h4">
+                        <Typography
+                          textAlign="center"
+                          color="textSecondary"
+                          variant="h4"
+                        >
                           Task: {selectedTask?.activity}
                         </Typography>
                       </Box>
@@ -147,17 +163,22 @@ const App = () => {
                         handleExit={handleExitStopwatch}
                         baseDuration={baseFocusTime}
                       />
-                    </>}
-                  <Box sx={{ display: 'flex', justifyContent: 'center' }}
-                  >
-                    <Button variant='contained' onClick={() => handleReturn()}>
+                    </>
+                  )}
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="contained" onClick={() => handleReturn()}>
                       Exit
                     </Button>
                   </Box>
                 </>
-                : <Box display='flex' flexDirection='column'
-                  alignItems="center" justifyContent="center">
-                  <Button variant='contained' onClick={() => handleStart()}>
+              ) : (
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Button variant="contained" onClick={() => handleStart()}>
                     Start
                   </Button>
                   <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
@@ -168,17 +189,21 @@ const App = () => {
                       onChange={handleActivitySelect}
                       label="Activity"
                     >
-                      {activities.map(a =>
-                        <MenuItem key={a} value={a}>{a}</MenuItem>)}
+                      {activities.map(a => (
+                        <MenuItem key={a} value={a}>
+                          {a}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                   <TasksTable tasks={tasks.toReversed()} />
-                </Box>}
+                </Box>
+              )}
             </Box>
           </Paper>
         </Grid>
       </Grid>
-    </Grid >
+    </Grid>
   );
 };
 
