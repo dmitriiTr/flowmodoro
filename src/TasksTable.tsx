@@ -5,40 +5,56 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
 } from '@mui/material';
 
-import React from 'react';
-import { TasksWithDay } from './types';
+import { Task } from './types';
 import { secondsToRoundedMinutes } from './utils';
 
-export const TasksTable = React.memo(({ tasks }: { tasks: TasksWithDay[] }) =>
-  <TableContainer sx={(theme) => ({
-    [theme.breakpoints.down('sm')]: { height: 250, margin: 2 },
-    [theme.breakpoints.up('sm')]: { height: 390 },
-  })} component={Paper}>
-    <Table aria-label="simple table">
-      <TableHead>
-        <TableRow>
-          <TableCell>Day</TableCell>
-          <TableCell>Reading</TableCell>
-          <TableCell>Work</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {tasks.map((task) => (
-          <TableRow
-            key={task.day}
-          >
-            <TableCell component="th" scope="row">
-              {task.day}
-            </TableCell>
-            {task.tasks.map(t =>
-              <TableCell key={t.activity} component="th" scope="row">
-                {secondsToRoundedMinutes(t.time)}
-              </TableCell>)}
-          </TableRow>))}
-      </TableBody>
-    </Table>
-  </TableContainer>
-);
+export const TasksTable = ({ tasks }: { tasks: Task[] }) => {
+  const tasksGrouped = Object.entries(
+    Object.groupBy(tasks, task => task.day) as Record<string, Task[]>
+  );
+
+  const tasksMapped: Task[] = tasksGrouped.map(([day, tasks]) => {
+    return {
+      day,
+      time: tasks.reduce((a, b) => a + b.time, 0) ?? 0,
+      activity: tasks[0].activity,
+    };
+  });
+  return (
+    <TableContainer
+      sx={theme => ({
+        [theme.breakpoints.down('sm')]: { height: 250, margin: 2 },
+        [theme.breakpoints.up('sm')]: { height: 390 },
+      })}
+      component={Paper}
+    >
+      <Table aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Day</TableCell>
+            <TableCell>Activity</TableCell>
+            <TableCell>Time</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {tasksMapped.map(task => (
+            <TableRow key={task.day}>
+              <TableCell component="th" scope="row">
+                {task.day}
+              </TableCell>
+              <TableCell key={task.activity} component="th" scope="row">
+                {task.activity}
+              </TableCell>
+              <TableCell component="th" scope="row">
+                {secondsToRoundedMinutes(task.time)}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};

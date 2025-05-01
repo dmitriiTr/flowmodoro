@@ -1,4 +1,4 @@
-import { Activity, TasksWithDay } from './types';
+import { Activity, Task } from './types';
 import { BASE_FOCUS_DURATION_MINUTES, activities } from './constants';
 import {
   Box,
@@ -11,7 +11,7 @@ import {
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
-import { emptyTodayTask, nowString, secondsToRoundedMinutes } from './utils';
+import { nowString, secondsToRoundedMinutes } from './utils';
 import { useEffect, useState } from 'react';
 
 import Button from '@mui/material/Button';
@@ -20,7 +20,7 @@ import { TasksTable } from './TasksTable';
 import Timer from './Timer';
 
 const App = () => {
-  const [tasks, setTasks] = useState<TasksWithDay[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   const [activity, setActivity] = useState<Activity>('work');
   const [showTimer, setShowTimer] = useState(true);
@@ -29,21 +29,13 @@ const App = () => {
     BASE_FOCUS_DURATION_MINUTES
   );
 
-  const isSameDay = tasks[tasks.length - 1]?.day === nowString();
   useEffect(() => {
     const storedTasks = localStorage.getItem('tasks');
     if (storedTasks) {
-      const parsed = JSON.parse(storedTasks) as TasksWithDay[];
-      //if today is now stored adding today
-      if (!parsed.find(t => t.day === nowString())) {
-        setTasks(parsed.concat([emptyTodayTask()]));
-      } else {
-        setTasks(parsed);
-      }
-    } else {
-      setTasks([emptyTodayTask()]);
+      const parsed = JSON.parse(storedTasks) as Task[];
+      setTasks(parsed);
     }
-  }, [isSameDay]);
+  }, []);
 
   useEffect(() => {
     window.addEventListener('beforeunload', e => {
@@ -64,37 +56,30 @@ const App = () => {
     setLastFocus(null);
   };
 
-  const handleExitStopwatch = (seconds: number, newBaseDuration: number) => {
+  const handleExitStopwatch = (time: number, newBaseDuration: number) => {
     setBaseFocusTime(newBaseDuration);
     setTasks(tasks => {
-      const updatedTasks = tasks.map(t => {
-        if (t.day === nowString()) {
-          return {
-            day: t.day,
-            tasks: t.tasks.map(task =>
-              task.activity === activity
-                ? { ...task, time: task.time + seconds }
-                : task
-            ),
-          };
-        } else {
-          return t;
-        }
-      });
+      const updatedTasks = tasks.concat([
+        {
+          activity,
+          time,
+          day: nowString(),
+        },
+      ]);
 
       localStorage.setItem('tasks', JSON.stringify(updatedTasks));
       return updatedTasks;
     });
 
-    setLastFocus(seconds);
+    setLastFocus(time);
   };
 
   const handleActivitySelect = (e: SelectChangeEvent) =>
     setActivity(e.target.value as Activity);
 
-  const selectedTask = tasks
-    .find(a => a.day === nowString())
-    ?.tasks.find(t => t.activity === activity);
+  const totalTimeForCurrentActivityToday = tasks
+    .filter(t => t.day === nowString() && t.activity === activity)
+    .reduce((a, b) => a + b.time, 0);
 
   return (
     <Grid
@@ -140,7 +125,10 @@ const App = () => {
                           variant="subtitle2"
                         >
                           focused for{' '}
-                          {secondsToRoundedMinutes(selectedTask?.time ?? 0)} min
+                          {secondsToRoundedMinutes(
+                            totalTimeForCurrentActivityToday
+                          )}{' '}
+                          min
                         </Typography>
                       </Box>
                       <Timer
@@ -156,7 +144,7 @@ const App = () => {
                           color="textSecondary"
                           variant="h4"
                         >
-                          Task: {selectedTask?.activity}
+                          Task: {activity}
                         </Typography>
                       </Box>
                       <Stopwatch
