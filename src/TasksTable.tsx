@@ -12,17 +12,20 @@ import { Task } from './types';
 import { secondsToRoundedMinutes } from './utils';
 
 export const TasksTable = ({ tasks }: { tasks: Task[] }) => {
-  const tasksGrouped = Object.entries(
-    Object.groupBy(tasks, task => task.day) as Record<string, Task[]>
+  const tasksGrouped = Object.values(
+    Object.groupBy(tasks, task => `${task.day} ${task.activity}`)
   );
 
-  const tasksMapped: Task[] = tasksGrouped.map(([day, tasks]) => {
+  const tasksMapped: Task[] = tasksGrouped.map((tasks) => {
+    const firstTask = tasks![0];
     return {
-      day,
-      time: tasks.reduce((a, b) => a + b.time, 0) ?? 0,
-      activity: tasks[0].activity,
+      day: firstTask.day,
+      time: tasks!.reduce((a, b) => a + b.time, 0) ?? 0,
+      activity: firstTask.activity,
+      id: firstTask.id,
     };
   });
+
   return (
     <TableContainer
       sx={theme => ({

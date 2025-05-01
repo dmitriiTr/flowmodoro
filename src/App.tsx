@@ -56,14 +56,16 @@ const App = () => {
     setLastFocus(null);
   };
 
-  const handleExitStopwatch = (time: number, newBaseDuration: number) => {
+  const handleRest = (time: number, newBaseDuration: number) => {
     setBaseFocusTime(newBaseDuration);
     setTasks(tasks => {
+      const newTaskId = tasks.length + 1;
       const updatedTasks = tasks.concat([
         {
           activity,
           time,
           day: nowString(),
+          id: newTaskId,
         },
       ]);
 
@@ -148,7 +150,7 @@ const App = () => {
                         </Typography>
                       </Box>
                       <Stopwatch
-                        handleExit={handleExitStopwatch}
+                        handleRest={handleRest}
                         baseDuration={baseFocusTime}
                       />
                     </>

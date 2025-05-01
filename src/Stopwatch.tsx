@@ -8,11 +8,11 @@ import { useStopwatch } from 'react-timer-hook';
 
 interface StopwatchProps {
   baseDuration: number;
-  handleExit: (seconds: number, newBaseDuration: number) => void,
+  handleRest: (seconds: number, newBaseDuration: number) => void,
 }
 
 const Stopwatch = (props: StopwatchProps) => {
-  const { handleExit, baseDuration } = props;
+  const { handleRest, baseDuration } = props;
 
   const [focusTime, setFocusTime] = useState(baseDuration);
   const focusSeconds = useMemo(() => focusTime * 60, [focusTime]);
@@ -51,8 +51,8 @@ const Stopwatch = (props: StopwatchProps) => {
     }
   };
 
-  const handleExitClick = () => {
-    handleExit(totalSeconds, focusTime);
+  const handleRestClick = () => {
+    handleRest(totalSeconds, focusTime);
   };
 
   const handleChange =
@@ -74,7 +74,7 @@ const Stopwatch = (props: StopwatchProps) => {
             autoFocus onChange={e => handleChange(e)}
             disabled={isRunning} label="Duration, min" variant="outlined" />
           {isRunning
-            ? <Button variant='outlined' onClick={() => handleExitClick()}>
+            ? <Button variant='outlined' onClick={() => handleRestClick()}>
               Rest
             </Button>
             : <Button variant='outlined' disabled={isRunning}
