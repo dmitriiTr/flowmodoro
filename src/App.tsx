@@ -1,30 +1,18 @@
 import { Activity, Task } from './types';
-import { BASE_FOCUS_DURATION_MINUTES, activities } from './constants';
-import {
-  Box,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from '@mui/material';
-import { nowString, secondsToRoundedMinutes } from './utils';
+import { Box, Grid, Paper } from '@mui/material';
 import { useEffect, useState } from 'react';
 
-import Button from '@mui/material/Button';
-import Stopwatch from './Stopwatch';
-import { TasksTable } from './TasksTable';
-import Timer from './Timer';
+import { BASE_FOCUS_DURATION_MINUTES } from './constants';
+import Clock from './Clock';
+import { Page } from './enums';
+import Results from './Results';
+import { nowString } from './utils';
 
 const App = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [page, setPage] = useState(Page.Clock);
 
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [activity, setActivity] = useState<Activity>('work');
-  const [showTimer, setShowTimer] = useState(true);
-  const [lastFocusTime, setLastFocus] = useState<null | number>(null);
   const [baseFocusTime, setBaseFocusTime] = useState(
     BASE_FOCUS_DURATION_MINUTES
   );
@@ -44,16 +32,11 @@ const App = () => {
   }, []);
 
   const handleStart = () => {
-    setShowTimer(true);
+    setPage(Page.Clock);
   };
 
   const handleReturn = () => {
-    setShowTimer(false);
-    setLastFocus(null);
-  };
-
-  const handleExitTimer = () => {
-    setLastFocus(null);
+    setPage(Page.Results);
   };
 
   const handleRest = (time: number, newBaseDuration: number) => {
@@ -72,12 +55,9 @@ const App = () => {
       localStorage.setItem('tasks', JSON.stringify(updatedTasks));
       return updatedTasks;
     });
-
-    setLastFocus(time);
   };
 
-  const handleActivitySelect = (e: SelectChangeEvent) =>
-    setActivity(e.target.value as Activity);
+  const handleActivitySelect = (activity: Activity) => setActivity(activity);
 
   const totalTimeForCurrentActivityToday = tasks
     .filter(t => t.day === nowString() && t.activity === activity)
@@ -109,85 +89,23 @@ const App = () => {
               gap={5}
               justifyContent={'start'}
             >
-              {showTimer ? (
-                <>
-                  {lastFocusTime ? (
-                    <>
-                      <Box height={65}>
-                        <Typography
-                          textAlign="center"
-                          color="textSecondary"
-                          variant="h4"
-                        >
-                          Task: Rest
-                        </Typography>
-                        <Typography
-                          textAlign="center"
-                          color="textSecondary"
-                          variant="subtitle2"
-                        >
-                          focused for{' '}
-                          {secondsToRoundedMinutes(
-                            totalTimeForCurrentActivityToday
-                          )}{' '}
-                          min
-                        </Typography>
-                      </Box>
-                      <Timer
-                        lastFocus={lastFocusTime}
-                        handleExit={handleExitTimer}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <Box height={65}>
-                        <Typography
-                          textAlign="center"
-                          color="textSecondary"
-                          variant="h4"
-                        >
-                          Task: {activity}
-                        </Typography>
-                      </Box>
-                      <Stopwatch
-                        handleRest={handleRest}
-                        baseDuration={baseFocusTime}
-                      />
-                    </>
-                  )}
-                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button variant="contained" onClick={() => handleReturn()}>
-                      Exit
-                    </Button>
-                  </Box>
-                </>
+              {page === Page.Clock ? (
+                <Clock
+                  activity={activity}
+                  handleReturn={handleReturn}
+                  totalTimeForCurrentActivityToday={
+                    totalTimeForCurrentActivityToday
+                  }
+                  handleRest={handleRest}
+                  baseFocusTime={baseFocusTime}
+                />
               ) : (
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <Button variant="contained" onClick={() => handleStart()}>
-                    Start
-                  </Button>
-                  <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                    <InputLabel id="activity-label">Activity</InputLabel>
-                    <Select
-                      labelId="activity-label"
-                      value={activity}
-                      onChange={handleActivitySelect}
-                      label="Activity"
-                    >
-                      {activities.map(a => (
-                        <MenuItem key={a} value={a}>
-                          {a}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <TasksTable tasks={tasks.toReversed()} />
-                </Box>
+                <Results
+                  handleActivitySelect={handleActivitySelect}
+                  handleStart={handleStart}
+                  activity={activity}
+                  tasks={tasks}
+                />
               )}
             </Box>
           </Paper>
