@@ -1,11 +1,11 @@
 import { Box, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 import { Activity } from './types';
 import Button from '@mui/material/Button';
 import Stopwatch from './Stopwatch';
 import Timer from './Timer';
 import { secondsToRoundedMinutes } from './utils';
-import { useState } from 'react';
 
 interface ClockProps {
   activity: Activity;
@@ -30,6 +30,18 @@ const Clock = ({
   };
 
   const isShowTimer = Boolean(lastFocusTime);
+
+  const onBeforeUnload = (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+  };
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', onBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', onBeforeUnload);
+    };
+  }, []);
 
   return (
     <>

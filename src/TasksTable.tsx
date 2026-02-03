@@ -44,7 +44,7 @@ export const TasksTable = ({ tasks }: { tasks: Task[] }) => {
         </TableHead>
         <TableBody>
           {tasksMapped.map(task => (
-            <TableRow key={task.day}>
+            <TableRow key={task.day + task.activity}>
               <TableCell component="th" scope="row">
                 {task.day}
               </TableCell>

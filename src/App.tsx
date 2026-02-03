@@ -1,35 +1,26 @@
 import { Activity, Task } from './types';
+import { BASE_FOCUS_DURATION_MINUTES, LOCAL_STORAGE_KEY } from './constants';
 import { Box, Grid, Paper } from '@mui/material';
-import { useEffect, useState } from 'react';
 
-import { BASE_FOCUS_DURATION_MINUTES } from './constants';
 import Clock from './Clock';
 import { Page } from './enums';
 import Results from './Results';
 import { nowString } from './utils';
+import { useState } from 'react';
 
 const App = () => {
   const [page, setPage] = useState(Page.Clock);
 
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const getTasksFromStorage = () => {
+    const storedTasks = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return storedTasks ? (JSON.parse(storedTasks) as Task[]) : [];
+  };
+
+  const [tasks, setTasks] = useState<Task[]>(getTasksFromStorage);
   const [activity, setActivity] = useState<Activity>('work');
   const [baseFocusTime, setBaseFocusTime] = useState(
     BASE_FOCUS_DURATION_MINUTES
   );
-
-  useEffect(() => {
-    const storedTasks = localStorage.getItem('tasks');
-    if (storedTasks) {
-      const parsed = JSON.parse(storedTasks) as Task[];
-      setTasks(parsed);
-    }
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', e => {
-      e.preventDefault();
-    });
-  }, []);
 
   const goToClock = () => {
     setPage(Page.Clock);
@@ -52,7 +43,7 @@ const App = () => {
         },
       ]);
 
-      localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTasks));
       return updatedTasks;
     });
   };
