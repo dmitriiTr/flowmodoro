@@ -13,14 +13,14 @@ import { TasksTable } from './TasksTable';
 import { activities } from './constants';
 
 interface ResultsProps {
-  handleStart: VoidFunction;
+  goToClock: VoidFunction;
   handleActivitySelect: (activity: Activity) => void;
   activity: Activity;
   tasks: Task[];
 }
 
 const Results = ({
-  handleStart,
+  goToClock,
   activity,
   handleActivitySelect,
   tasks
@@ -36,7 +36,7 @@ const Results = ({
       alignItems="center"
       justifyContent="center"
     >
-      <Button variant="contained" onClick={() => handleStart()}>
+      <Button variant="contained" onClick={() => goToClock()}>
         Start
       </Button>
       <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>

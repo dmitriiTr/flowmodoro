@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 interface ClockProps {
   activity: Activity;
-  handleReturn: VoidFunction;
+  goToResults: VoidFunction;
   baseFocusTime: number;
   totalTimeForCurrentActivityToday: number;
   handleRest: (time: number, newBaseDuration: number) => void;
@@ -20,12 +20,12 @@ const Clock = ({
   baseFocusTime,
   totalTimeForCurrentActivityToday,
   handleRest,
-  handleReturn,
+  goToResults,
 }: ClockProps) => {
   const [lastFocusTime, setLastFocus] = useState<null | number>(null);
 
   const onRest = (seconds: number, newBaseDuration: number) => {
-    setLastFocus(lastFocusTime);
+    setLastFocus(seconds);
     handleRest(seconds, newBaseDuration);
   };
 
@@ -64,7 +64,7 @@ const Clock = ({
         </>
       )}
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Button variant="contained" onClick={() => handleReturn()}>
+        <Button variant="contained" onClick={() => goToResults()}>
           Exit
         </Button>
       </Box>

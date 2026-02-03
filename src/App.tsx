@@ -31,11 +31,11 @@ const App = () => {
     });
   }, []);
 
-  const handleStart = () => {
+  const goToClock = () => {
     setPage(Page.Clock);
   };
 
-  const handleReturn = () => {
+  const goToResults = () => {
     setPage(Page.Results);
   };
 
@@ -92,7 +92,7 @@ const App = () => {
               {page === Page.Clock ? (
                 <Clock
                   activity={activity}
-                  handleReturn={handleReturn}
+                  goToResults={goToResults}
                   totalTimeForCurrentActivityToday={
                     totalTimeForCurrentActivityToday
                   }
@@ -102,7 +102,7 @@ const App = () => {
               ) : (
                 <Results
                   handleActivitySelect={handleActivitySelect}
-                  handleStart={handleStart}
+                  goToClock={goToClock}
                   activity={activity}
                   tasks={tasks}
                 />
