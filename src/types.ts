@@ -4,9 +4,6 @@ export type Activity = typeof activities[number];
 export interface Task {
   activity: Activity;
   time: number;
-}
-
-export interface TasksWithDay {
-  day: string,
-  tasks: Task[]
+  day: string;
+  id: number;
 }
