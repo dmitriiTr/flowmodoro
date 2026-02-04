@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography';
-import { formatTimeWithSeconds } from './utils';
+import { formatTimeWithSeconds } from '../utils';
 import { useState } from 'react';
 
 interface TimeProps {

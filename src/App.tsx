@@ -1,8 +1,8 @@
 import { Box, Grid, Paper } from '@mui/material';
 
-import Clock from './Clock';
+import Clock from './components/Clock';
 import { Page } from './enums';
-import Results from './Results';
+import Results from './components/Results';
 import { useState } from 'react';
 
 const App = () => {

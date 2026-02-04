@@ -3,9 +3,9 @@ import { useContext, useEffect, useState } from 'react';
 
 import Button from '@mui/material/Button';
 import Stopwatch from './Stopwatch';
-import { TasksContext } from './TasksContextProvider';
+import { TasksContext } from '../TasksContextProvider';
 import Timer from './Timer';
-import { secondsToRoundedMinutes } from './utils';
+import { secondsToRoundedMinutes } from '../utils';
 
 interface ClockProps {
   goToResults: VoidFunction;

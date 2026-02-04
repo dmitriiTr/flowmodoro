@@ -2,9 +2,9 @@ import { Box, Stack, TextField } from '@mui/material';
 import { useContext, useEffect, useMemo, useState } from 'react';
 
 import Button from '@mui/material/Button';
-import { TasksContext } from './TasksContextProvider';
+import { TasksContext } from '../TasksContextProvider';
 import { Time } from './Time';
-import { alarm } from './constants';
+import { alarm } from '../constants';
 import { useStopwatch } from 'react-timer-hook';
 
 interface StopwatchProps {

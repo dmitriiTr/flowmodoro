@@ -2,8 +2,8 @@ import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Time } from './Time';
 import Typography from '@mui/material/Typography';
-import { alarm } from './constants';
-import { getTimeRest } from './utils';
+import { alarm } from '../constants';
+import { getTimeRest } from '../utils';
 import { useTimer } from 'react-timer-hook';
 
 interface TimerProps {

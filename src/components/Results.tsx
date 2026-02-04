@@ -6,12 +6,12 @@ import {
   Select,
   type SelectChangeEvent,
 } from '@mui/material';
-import { TasksContext } from './TasksContextProvider';
+import { TasksContext } from '../TasksContextProvider';
 
-import { Activity } from './types';
+import { Activity } from '../types';
 import Button from '@mui/material/Button';
 import { TasksTable } from './TasksTable';
-import { activities } from './constants';
+import { activities } from '../constants';
 import { useContext } from 'react';
 
 interface ResultsProps {

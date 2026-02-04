@@ -8,8 +8,8 @@ import {
   TableRow,
 } from '@mui/material';
 
-import { Task } from './types';
-import { secondsToRoundedMinutes } from './utils';
+import { Task } from '../types';
+import { secondsToRoundedMinutes } from '../utils';
 
 export const TasksTable = ({ tasks }: { tasks: Task[] }) => {
   const tasksGrouped = Object.values(
@@ -34,7 +34,7 @@ export const TasksTable = ({ tasks }: { tasks: Task[] }) => {
       })}
       component={Paper}
     >
-      <Table aria-label="simple table">
+      <Table>
         <TableHead>
           <TableRow>
             <TableCell>Day</TableCell>
