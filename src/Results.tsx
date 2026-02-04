@@ -6,25 +6,23 @@ import {
   Select,
   type SelectChangeEvent,
 } from '@mui/material';
+import { TasksContext } from './TasksContextProvider';
 
-import { Activity, Task } from './types';
+import { Activity } from './types';
 import Button from '@mui/material/Button';
 import { TasksTable } from './TasksTable';
 import { activities } from './constants';
+import { useContext } from 'react';
 
 interface ResultsProps {
   goToClock: VoidFunction;
-  handleActivitySelect: (activity: Activity) => void;
-  activity: Activity;
-  tasks: Task[];
 }
 
-const Results = ({
-  goToClock,
-  activity,
-  handleActivitySelect,
-  tasks
-}: ResultsProps) => {
+const Results = ({ goToClock }: ResultsProps) => {
+  const { tasks, activity, handleActivitySelect } = useContext(
+    TasksContext
+  )!;
+
   const onChangeActivity = (e: SelectChangeEvent) => {
     handleActivitySelect(e.target.value as Activity);
   };

@@ -1,27 +1,23 @@
 import { Box, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
-import { Activity } from './types';
 import Button from '@mui/material/Button';
 import Stopwatch from './Stopwatch';
+import { TasksContext } from './TasksContextProvider';
 import Timer from './Timer';
 import { secondsToRoundedMinutes } from './utils';
 
 interface ClockProps {
-  activity: Activity;
   goToResults: VoidFunction;
-  baseFocusTime: number;
-  totalTimeForCurrentActivityToday: number;
-  handleRest: (time: number, newBaseDuration: number) => void;
 }
 
-const Clock = ({
-  activity,
-  baseFocusTime,
-  totalTimeForCurrentActivityToday,
-  handleRest,
-  goToResults,
-}: ClockProps) => {
+const Clock = ({ goToResults }: ClockProps) => {
+  const {
+    activity,
+    totalTimeForCurrentActivityToday,
+    handleRest,
+  } = useContext(TasksContext)!;
+
   const [lastFocusTime, setLastFocus] = useState<null | number>(null);
 
   const onRest = (seconds: number, newBaseDuration: number) => {
@@ -72,7 +68,7 @@ const Clock = ({
               Task: {activity}
             </Typography>
           </Box>
-          <Stopwatch handleRest={onRest} baseDuration={baseFocusTime} />
+          <Stopwatch handleRest={onRest} />
         </>
       )}
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>

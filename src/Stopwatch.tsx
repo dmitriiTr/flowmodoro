@@ -1,32 +1,26 @@
 import { Box, Stack, TextField } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 
 import Button from '@mui/material/Button';
+import { TasksContext } from './TasksContextProvider';
 import { Time } from './Time';
 import { alarm } from './constants';
 import { useStopwatch } from 'react-timer-hook';
 
 interface StopwatchProps {
-  baseDuration: number;
-  handleRest: (seconds: number, newBaseDuration: number) => void,
+  handleRest: (seconds: number, newBaseDuration: number) => void;
 }
 
-const Stopwatch = (props: StopwatchProps) => {
-  const { handleRest, baseDuration } = props;
+const Stopwatch = ({ handleRest }: StopwatchProps) => {
+  const { baseFocusTime } = useContext(TasksContext)!;
 
-  const [focusTime, setFocusTime] = useState(baseDuration);
+  const [focusTime, setFocusTime] = useState(baseFocusTime);
   const focusSeconds = useMemo(() => focusTime * 60, [focusTime]);
 
-  const {
-    totalSeconds,
-    seconds,
-    minutes,
-    hours,
-    start,
-    isRunning
-  } = useStopwatch({
-    autoStart: false,
-  });
+  const { totalSeconds, seconds, minutes, hours, start, isRunning } =
+    useStopwatch({
+      autoStart: false,
+    });
   const isOvertime = totalSeconds >= focusSeconds;
 
   useEffect(() => {
@@ -35,7 +29,7 @@ const Stopwatch = (props: StopwatchProps) => {
       interval = setInterval(() => alarm.play(), 30 * 60 * 1000);
     }
     return () => {
-      if(interval) {
+      if (interval) {
         clearInterval(interval);
       }
     };
@@ -46,7 +40,7 @@ const Stopwatch = (props: StopwatchProps) => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if(event.key === 'Enter') {
+    if (event.key === 'Enter') {
       start();
     }
   };
@@ -55,32 +49,52 @@ const Stopwatch = (props: StopwatchProps) => {
     handleRest(totalSeconds, focusTime);
   };
 
-  const handleChange =
-    (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-      setFocusTime(parseInt(event.target.value));
-    };
+  const handleChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setFocusTime(parseInt(event.target.value));
+  };
 
   return (
-    <Box display='flex' flexDirection='column'
-      alignItems="center" justifyContent="center">
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+    >
       <Box height={110}>
-        <Time hours={hours} minutes={minutes} seconds={seconds}
-          overtime={isOvertime} />
+        <Time
+          hours={hours}
+          minutes={minutes}
+          seconds={seconds}
+          overtime={isOvertime}
+        />
       </Box>
       <Box sx={{ width: '40%' }}>
         <Stack direction="row" spacing={2}>
-          <TextField value={isNaN(focusTime) ? '' : focusTime} size='small'
+          <TextField
+            value={isNaN(focusTime) ? '' : focusTime}
+            size="small"
             onKeyDown={e => handleKeyDown(e)}
-            autoFocus onChange={e => handleChange(e)}
-            disabled={isRunning} label="Duration, min" variant="outlined" />
-          {isRunning
-            ? <Button variant='outlined' onClick={() => handleRestClick()}>
+            autoFocus
+            onChange={e => handleChange(e)}
+            disabled={isRunning}
+            label="Duration, min"
+            variant="outlined"
+          />
+          {isRunning ? (
+            <Button variant="outlined" onClick={() => handleRestClick()}>
               Rest
             </Button>
-            : <Button variant='outlined' disabled={isRunning}
-              onClick={() => handleStartClick()}>
+          ) : (
+            <Button
+              variant="outlined"
+              disabled={isRunning}
+              onClick={() => handleStartClick()}
+            >
               Start
-            </Button>}
+            </Button>
+          )}
         </Stack>
       </Box>
     </Box>
