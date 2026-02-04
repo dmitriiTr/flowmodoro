@@ -1,4 +1,4 @@
-import { Box, Stack, TextField } from '@mui/material';
+import { Box, Stack, TextField, useTheme } from '@mui/material';
 import { useContext, useEffect, useMemo, useState } from 'react';
 
 import Button from '@mui/material/Button';
@@ -12,6 +12,7 @@ interface StopwatchProps {
 }
 
 const Stopwatch = ({ handleRest }: StopwatchProps) => {
+  const theme = useTheme();
   const { baseFocusTime } = useContext(TasksContext)!;
 
   const [focusTime, setFocusTime] = useState(baseFocusTime);
@@ -21,11 +22,12 @@ const Stopwatch = ({ handleRest }: StopwatchProps) => {
     useStopwatch({
       autoStart: false,
     });
-  const isOvertime = totalSeconds >= focusSeconds;
+
+  const isTimeCompleted = totalSeconds >= focusSeconds;
 
   useEffect(() => {
     let interval: number | null = null;
-    if (isOvertime) {
+    if (isTimeCompleted) {
       interval = setInterval(() => alarm.play(), 30 * 60 * 1000);
     }
     return () => {
@@ -33,7 +35,7 @@ const Stopwatch = ({ handleRest }: StopwatchProps) => {
         clearInterval(interval);
       }
     };
-  }, [isOvertime]);
+  }, [isTimeCompleted]);
 
   const handleStartClick = () => {
     start();
@@ -55,6 +57,20 @@ const Stopwatch = ({ handleRest }: StopwatchProps) => {
     setFocusTime(parseInt(event.target.value));
   };
 
+  const getColorForTime = () => {
+    const isOvertime = totalSeconds >= focusSeconds * 2;
+
+    if (isOvertime) {
+      return theme.palette.warning.dark;
+    }
+
+    if (isTimeCompleted) {
+      return theme.palette.primary.main;
+    }
+
+    return undefined;
+  };
+
   return (
     <Box
       display="flex"
@@ -67,7 +83,7 @@ const Stopwatch = ({ handleRest }: StopwatchProps) => {
           hours={hours}
           minutes={minutes}
           seconds={seconds}
-          overtime={isOvertime}
+          color={getColorForTime()}
         />
       </Box>
       <Box sx={{ width: '40%' }}>
