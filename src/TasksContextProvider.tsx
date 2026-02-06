@@ -56,7 +56,7 @@ export const TasksContextProvider = ({ children }: ChildrenProps) => {
     .reduce((a, b) => a + b.time, 0);
 
   return (
-    <TasksContext.Provider
+    <TasksContext
       value={{
         tasks,
         baseFocusTime,
@@ -67,6 +67,6 @@ export const TasksContextProvider = ({ children }: ChildrenProps) => {
       }}
     >
       {children}
-    </TasksContext.Provider>
+    </TasksContext>
   );
 };
