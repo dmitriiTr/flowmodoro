@@ -14,7 +14,7 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    "no-unused-expressions": 1,
+    "no-unused-expressions": 2,
     "curly": 1,
     "@typescript-eslint/naming-convention": [
       "warn",
