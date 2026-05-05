@@ -14,7 +14,7 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    "no-unused-expressions": 1,
+    "no-unused-expressions": 2,
     "curly": 1,
     "@typescript-eslint/naming-convention": [
       "warn",
@@ -27,7 +27,6 @@ module.exports = {
     "eqeqeq": 1,
     "indent": [1, 2],
     "no-debugger": 1,
-    "@typescript-eslint/quotes": [1, "single"],
     "no-trailing-spaces": 1,
     "sort-imports": [1, { "allowSeparatedGroups": true }],
     "linebreak-style": [1, "windows"],
